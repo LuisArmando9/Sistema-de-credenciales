@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Routing\UrlGenerator;
+use Illuminate\Support\Facades\URL;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -14,7 +16,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+      
+        if (env('REDIRECT_HTTPS')) {
+            $this->app['request']->server->set('HTTPS', true);
+        }
     }
 
     /**
@@ -22,11 +27,17 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(UrlGenerator $url)
     {
+<<<<<<< HEAD
          if (config('app.env') === 'production') {
                 URL::forceScheme('https');
         }
+=======
+       if (config('app.env') === 'production') {
+    URL::forceScheme('https');
+}
+>>>>>>> 64b1f2d (add Force https)
         Validator::extend('alpha_spaces', function ($attribute, $value) {
 
             // This will only accept alpha and spaces. 
@@ -36,5 +47,6 @@ class AppServiceProvider extends ServiceProvider
     
         });
         Paginator::useBootstrap();
+       
     }
 }

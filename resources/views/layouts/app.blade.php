@@ -10,7 +10,11 @@
     <title>@yield('title')</title>
 
     <!-- Scripts -->
+<<<<<<< HEAD
     <script src="{{ secure_asset('js/app,js')}}')" defer></script>
+=======
+    <script src="{{ asset('js/app.js') }}"></script>
+>>>>>>> 64b1f2d (add Force https)
 
     <link rel="icon" href="{{ secure_asset('images/favicon.ico')}}" type="image/x-icon">
     <!-- Google font-->
