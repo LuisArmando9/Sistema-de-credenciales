@@ -96,7 +96,7 @@ class HPDF{
         $worker->id);
         $this->fpdf->Text(self::BACK_DESCRIPTION_X,  self::BACK_FOLIO_AND_DEPARTAMENT_Y+$i,
         $this->departaments[$worker->departamentId]);
-        $this->fpdf->Text(self::BACK_DESCRIPTION_X, self::BACK_ENTRY_Y+$i,"2021-07-08");
+        $this->fpdf->Text(self::BACK_DESCRIPTION_X, self::BACK_ENTRY_Y+$i,$worker->entry);
     }
     private function writeCredential($worker){
       
