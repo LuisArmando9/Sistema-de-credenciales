@@ -32,7 +32,6 @@
 </head>
 <body @yield('theme')>
   <!-- Pre-loader start -->
-  <div id="app">
   <div class="theme-loader">
       <div class="loader-track">
           <div class="preloader-wrapper">
@@ -87,9 +86,11 @@
   </div>
   <!-- Pre-loader end -->
   <!--content-->
-    @yield('content')
+    <div id="app">
+        @yield('content')
+    </div>
   <!-- #region -->
-  </div>
+  
     <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
     <!-- Required Jquery -->
     <script type="text/javascript" src="{{ asset('js/jquery/jquery.min.js') }}"></script>

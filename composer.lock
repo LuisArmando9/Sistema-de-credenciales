@@ -4,8 +4,117 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b0ae91ec3291e98dbf5dd3469d5b718",
+    "content-hash": "bc6d02619c84ed3b31fb14b41ec904ae",
     "packages": [
+        {
+            "name": "anam/phantomjs-linux-x86-binary",
+            "version": "v2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/anam-hossain/phantomjs-linux-x86-binary.git",
+                "reference": "cb90cd0e7bd4ad34f52e6834783b1c5adae15014"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/anam-hossain/phantomjs-linux-x86-binary/zipball/cb90cd0e7bd4ad34f52e6834783b1c5adae15014",
+                "reference": "cb90cd0e7bd4ad34f52e6834783b1c5adae15014",
+                "shasum": ""
+            },
+            "bin": [
+                "bin/phantomjs"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Anam\\PhantomLinux\\": "/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Anam hossain",
+                    "email": "enam33@gmail.com"
+                }
+            ],
+            "description": "PhantomJS static linked binary for 64 bit linux systems. Most of Linux distributions are supported including Ubuntu, Debian, Fedora and CentOS.",
+            "homepage": "http://phantomjs.org/download.html",
+            "keywords": [
+                "binary",
+                "phantomjs",
+                "phantomjs binary"
+            ],
+            "support": {
+                "issues": "https://github.com/anam-hossain/phantomjs-linux-x86-binary/issues",
+                "source": "https://github.com/anam-hossain/phantomjs-linux-x86-binary/tree/master"
+            },
+            "time": "2016-04-05T05:24:48+00:00"
+        },
+        {
+            "name": "anam/phantommagick",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/anam-hossain/phantommagick.git",
+                "reference": "7da1cb92198717e5aba7a4a8c9b8eb61c3ae12eb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/anam-hossain/phantommagick/zipball/7da1cb92198717e5aba7a4a8c9b8eb61c3ae12eb",
+                "reference": "7da1cb92198717e5aba7a4a8c9b8eb61c3ae12eb",
+                "shasum": ""
+            },
+            "require": {
+                "league/flysystem": "~1.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~4.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Anam\\PhantomMagick\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anam hossain",
+                    "email": "enam33@gmail.com"
+                }
+            ],
+            "description": "PhantomMagick provides a simple API to ease the process of converting HTML to PDF or images",
+            "homepage": "https://github.com/anam-hossain/phantommagick",
+            "keywords": [
+                "Html 2 jpg",
+                "Html 2 pdf",
+                "Laravel pdf",
+                "Phantom",
+                "Screen capture",
+                "converter",
+                "html to image",
+                "html to pdf",
+                "html to png",
+                "image converter",
+                "invoice",
+                "laravel",
+                "pdf",
+                "pdf converter",
+                "phantomjs"
+            ],
+            "support": {
+                "issues": "https://github.com/anam-hossain/phantommagick/issues",
+                "source": "https://github.com/anam-hossain/phantommagick/tree/master"
+            },
+            "time": "2017-08-07T09:06:12+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "v2.0.3",
@@ -187,6 +296,72 @@
                 }
             ],
             "time": "2021-08-15T20:50:18+00:00"
+        },
+        {
+            "name": "codedge/laravel-fpdf",
+            "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codedge/laravel-fpdf.git",
+                "reference": "413b570477473293c8d216681bd40d635e1c3276"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/codedge/laravel-fpdf/zipball/413b570477473293c8d216681bd40d635e1c3276",
+                "reference": "413b570477473293c8d216681bd40d635e1c3276",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^6.0 || ^7.0 || ^8.0",
+                "php": ">=7.3 || ^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.21.0",
+                "phpunit/phpunit": "^9.5.9"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Fpdf": "Codedge\\Fpdf\\Facades\\Fpdf"
+                    },
+                    "providers": [
+                        "Codedge\\Fpdf\\FpdfServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Codedge\\Fpdf\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Holger Lösken",
+                    "email": "holger.loesken@codedge.de"
+                }
+            ],
+            "description": "Laravel package to include Fpdf. It ships with Fpdf 1.82.",
+            "keywords": [
+                "fpdf",
+                "laravel",
+                "pdf"
+            ],
+            "support": {
+                "issues": "https://github.com/codedge/laravel-fpdf/issues",
+                "source": "https://github.com/codedge/laravel-fpdf"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/codedge",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-09-14T12:03:46+00:00"
         },
         {
             "name": "dflydev/dot-access-data",

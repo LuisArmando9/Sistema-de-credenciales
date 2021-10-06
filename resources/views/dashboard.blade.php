@@ -380,31 +380,16 @@
 @endsection
 
 @section("viewModalScript")
-    <script>
-        $("#typePage").on("change", function(){
-            switch(this.value){
-                case "ONE":
-                    $(".minRangeText").text("Número del folio")
-                    $("#maxRange").hide(200);
-                    break;
-                case "CUSTOM":
-                    $(".minRangeText").text("Minimo");
-                    $("input[name='maxRange']").val(0);
-                    $("#maxRange").show(200);
-                    break;
-            }
-        });
-        $("input[name='minRange']").keyup(function(){
-            if($("#typePage").val() === "ONE"){
-                $("input[name='maxRange']").val($(this).val());
-            }
-        });
-        
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="{{ asset('js/custom/credential.js') }}" ></script>
     @error("error_input")
         <script>
             $("#exampleModal").modal("show")
         </script>
     @enderror
+    @if(session("PRINT_FAIL") == "IS_OK")
+      <script>alert("Solo se pueden imprimir 50 credenciales por pdf")</script>
+    @endif
 @endsection
+
 

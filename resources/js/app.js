@@ -9,6 +9,8 @@ require('./bootstrap');
 window.Vue = require('vue').default;
 window.Swal = require('sweetalert2');
 
+
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -20,7 +22,7 @@ window.Swal = require('sweetalert2');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('modal-printing', require('./components/ModalPrinting.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
