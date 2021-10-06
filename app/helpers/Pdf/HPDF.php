@@ -96,7 +96,11 @@ class HPDF{
         $worker->id);
         $this->fpdf->Text(self::BACK_DESCRIPTION_X,  self::BACK_FOLIO_AND_DEPARTAMENT_Y+$i,
         $this->departaments[$worker->departamentId]);
+<<<<<<< HEAD
         $this->fpdf->Text(self::BACK_DESCRIPTION_X, self::BACK_ENTRY_Y+$i,$worker->entry);
+=======
+        $this->fpdf->Text(self::BACK_DESCRIPTION_X, self::BACK_ENTRY_Y+$i,"2021-07-08");
+>>>>>>> 1188220 (Upload pdf dile)
     }
     private function writeCredential($worker){
       
@@ -122,6 +126,14 @@ class HPDF{
     public function getOutput($fileName){
         ob_end_clean();
         return $this->fpdf->Output("D", $fileName);
+<<<<<<< HEAD
     }  
+=======
+    }
+
+
+
+    
+>>>>>>> 1188220 (Upload pdf dile)
 
 }

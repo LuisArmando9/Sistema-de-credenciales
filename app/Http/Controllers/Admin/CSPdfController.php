@@ -1,8 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
-
-use PDF;
 use Illuminate\Http\Request;
 use App\helpers\DbTables\Constants\Constants;
 use App\Http\Controllers\Controller;
@@ -12,21 +9,18 @@ use App\Models\Tinturas;
 use App\Models\Toallera;
 use Illuminate\Support\Facades\Storage;
 use App\Models\CCPdf;
-use Codedge\Fpdf\Fpdf\Fpdf;
-use App\helpers\Pdf\HPDF;
-
-class PdfController extends Controller
+use Illuminate\Support\Facades\View;
+use Response;
+class CSPdfController extends Controller
 {
     const RULES = [
         "minRange" =>["required", "numeric", "lte:maxRange", "not_in:0", "gt:0"],
         "maxRange" =>[ "required", "numeric", "gte:minRange", "not_in:0", "gt:0"],
         "denomination" =>["required","string","regex:/TOALLERA|TINTURA/"]
     ];
-    const CREDENTIAL_INCREMENT = 70;
     public function __construct()
     {
         $this->middleware(['role:ADMIN', 'auth']);
-        
     }
     /**
      * Display a listing of the resource.
@@ -36,22 +30,7 @@ class PdfController extends Controller
     public function index()
     {
         
-        return view("admin.pdf.credentials")->with("workers", DB::table("tintura")
-        ->skip(0)
-        ->take(19)
-        ->get())->with("denomination", "Tintura");
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
- 
     private function areEqualRanges($data){
         return $data["minRange"] == $data["maxRange"];
     }
@@ -97,16 +76,7 @@ class PdfController extends Controller
         ]);
 
     }
-<<<<<<< HEAD
-=======
-    private function writeCell($fpdf, $text,  $fontWeigth, $cell=20){
-        $size = strlen($text) > 9 ? 50 : 30;
-        $fpdf->Cell($cell);
-        $fpdf->SetFont('Arial',$fontWeigth,9);
-        $fpdf->Cell($size,5,$text,1,1,'L');
 
-    }
->>>>>>> 1188220 (Upload pdf dile)
     /**
      * Store a newly created resource in storage.
      *
@@ -122,40 +92,26 @@ class PdfController extends Controller
         }
         $validaton = Validator::make($response, self::RULES);  
         if($validaton->fails()){
-            $validaton->errors()->add('error_input', 'error text');
-            return redirect()->back()->withInput()->withErrors($validaton);
+            
+           return Response::json($validaton->errors());
+            
+            //return redirect()->back()->withInput()->withErrors($validaton);
         }
         $pdfName = $this->getPdfName($response);
+        $credentialsPath =  public_path('credentials/');
         $denomination = $response["denomination"];
         $workers = $this->getWorkerData($request);
-        if($workers->count() > HPDF::MAX_CREDENTIALS){
-            return redirect()->back()->with("PRINT_FAIL", "IS_OK");
-        }
-        $pdf = new HPDF($workers, $denomination);
-        $pdf->writePdfCredential();
-        $this->insertPdfData($response);
-        return $pdf->getOutput($pdfName);
-
+        $html = View::make("admin.pdf.credentials")->render();
+        return Response::json(["view" => $html]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Pdf  $pdf
+     * @param  \App\Models\CSPdf  $cSPdf
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Pdf  $pdf
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function show( $id)
     {
         //
     }
@@ -164,10 +120,10 @@ class PdfController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Pdf  $pdf
+     * @param  \App\Models\CSPdf  $cSPdf
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,  $id)
     {
         //
     }
@@ -175,10 +131,10 @@ class PdfController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Pdf  $pdf
+     * @param  \App\Models\CSPdf  $cSPdf
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy( $id)
     {
         //
     }
