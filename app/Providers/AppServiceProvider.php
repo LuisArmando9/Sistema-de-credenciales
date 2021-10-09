@@ -3,7 +3,6 @@
 namespace App\Providers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\URL;
@@ -29,15 +28,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(UrlGenerator $url)
     {
-<<<<<<< HEAD
-         if (config('app.env') === 'production') {
+       if (config('app.env') === 'production') {
                 URL::forceScheme('https');
         }
-=======
-       if (config('app.env') === 'production') {
-    URL::forceScheme('https');
-}
->>>>>>> 64b1f2d (add Force https)
         Validator::extend('alpha_spaces', function ($attribute, $value) {
 
             // This will only accept alpha and spaces. 

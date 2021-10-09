@@ -7,6 +7,16 @@
     <form class="form-material" method="POST" action="{{ route('toallera.update', $worker->id) }}">
         @csrf
         @method("PUT")
+        <div class="form-group @error('id') form-danger @else form-primary @enderror">
+            <input type="text" name="id" class="form-control" value="@error('id') {{ old('id') }} @else {{$worker->id}} @enderror"   required>
+            <span class="form-bar"></span>
+            <label class="float-label">Folio</label>
+            @error('id')
+                <span class="text-danger" role="alert">
+                    <p>{{ $message }}</p>
+                </span>
+            @enderror
+        </div>
         <div class="form-group @error('worker') form-danger @else form-primary @enderror">
             <input type="text" name="worker" class="form-control" value=" @error('worker') {{ old('worker') }} @else {{$worker->worker}} @enderror"   required>
             <span class="form-bar"></span>

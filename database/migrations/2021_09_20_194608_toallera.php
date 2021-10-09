@@ -14,7 +14,7 @@ class Toallera extends Migration
     public function up()
     {
         Schema::create('toallera', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('id')->primary();
             $table->string("worker", 100);
             $table->string("curp", 25);
             $table->boolean("active");

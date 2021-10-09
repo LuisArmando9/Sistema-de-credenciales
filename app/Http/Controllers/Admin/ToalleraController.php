@@ -6,33 +6,13 @@ use App\Models\Toallera;
 use App\Models\Departament;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\Rules\CsvRules;
-use App\helpers\DbTables\DBToallera;
+use App\helpers\Csv\CSVEmployee;
+use App\helpers\Csv\Constants\Tables;
+use App\Http\Controllers\Admin\Rules\WorkerRules;
 use Exception;
 
 class ToalleraController extends Controller
 {
-    const RULES = [
-        "worker" => "required|alpha_spaces",
-        "curp" => [
-            "required",
-            "string",
-            "min:18",
-            "max:18",
-            "regex:/^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/",
-        ],
-        "nss" => "required|numeric|digits:11",
-        "departamentId"  => "required|numeric",
-        "entry" => "required|date",
-        "active" =>"required|boolean"
-    ];
-    const RULES_SEARCH =[
-        "search" =>
-        [
-            "required",
-            "numeric",
-        ]
-    ];
-
     public function __construct()
     {
         $this->middleware(['role:ADMIN', 'auth']);
@@ -51,7 +31,7 @@ class ToalleraController extends Controller
             ->with("workers", Toallera::paginate())
             ->with("containsPaginate", true);
         }
-        $request->validate(self::RULES_SEARCH);
+        $request->validate(WorkerRules::getRulesWithId(Tables::TOALLERA));
         return view("admin.toallera.index")
         ->with("workers", Toallera::where("id", $response)->get())
         ->with("containsPaginate", false);
@@ -84,7 +64,7 @@ class ToalleraController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(self::RULES);
+        $request->validate(WorkerRules::TOALLERA);
         $response = $request->except(['_token']);
         
         try {
@@ -130,7 +110,12 @@ class ToalleraController extends Controller
     public function update(Request $request, $id)
     {
         Toallera::findOrfail($id);
-        $request->validate(self::RULES);
+        $tempId = $request->post("id");
+        if($tempId == $id){
+            $request->validate(WorkerRules::RULES);
+        }else{
+            $request->validate(WorkerRules::getRulesWithId(Tables::TOALLERA));
+        }
         $response = $request->except(['_token', "_method"]);
         Toallera::where('id', '=', $id)->update($response);
         return redirect()->route('toallera.index')
@@ -160,7 +145,7 @@ class ToalleraController extends Controller
         $path = $request->file("cvs_file")->getRealPath();
         try {
             $path = $request->file("cvs_file")->getRealPath();
-            $departamentImport = new DBToallera($path);
+            $departamentImport = new CSVEmployee($path, Tables::TOALLERA);
             $departamentImport->insert();
        } catch (\Exception $th) {
             return redirect()

@@ -1,5 +1,5 @@
 <?php
-namespace App\helpers\DbTables\Constants;
+namespace App\helpers\Csv\Constants;
 
 class Constants {
     const EMPTY = 0;

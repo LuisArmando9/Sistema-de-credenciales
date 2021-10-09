@@ -6,9 +6,9 @@ use App\Models\Tinturas;
 use App\Models\Departament;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\Rules\CsvRules;
-use App\helpers\DbTables\DBTinturas;
-use App\Http\Controllers\Admin\ToalleraController;
-
+use App\helpers\Csv\CSVEmployee;
+use App\helpers\Csv\Constants\Tables;
+use App\Http\Controllers\Admin\Rules\WorkerRules;
 
 /**
  * https://stackoverflow.com/questions/32810385/laravel-preg-match-no-ending-delimiter-found
@@ -34,7 +34,7 @@ class TinturasController extends Controller
             ->with("workers", Tinturas::paginate())
             ->with("containsPaginate", true);
         }
-        $request->validate(ToalleraController::RULES_SEARCH);
+        $request->validate(WorkerRules::SEARCH);
         return view("admin.tintura.index")
         ->with("workers", Tinturas::where("id", $response)->get())
         ->with("containsPaginate", false);
@@ -66,7 +66,7 @@ class TinturasController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(ToalleraController::RULES);
+        $request->validate(WorkerRules::getRulesWithId(Tables::TINTURA));
         $response = $request->except(['_token']);
         
         try {
@@ -113,7 +113,12 @@ class TinturasController extends Controller
     public function update(Request $request, $id)
     {
         Tinturas::findOrfail($id);
-        $request->validate(ToalleraController::RULES);
+        $tempId = $request->post("id");
+        if($tempId == $id){
+            $request->validate(WorkerRules::RULES);
+        }else{
+            $request->validate(WorkerRules::getRulesWithId(Tables::TINTURA));
+        }
         $response = $request->except(['_token', "_method"]);
         Tinturas::where('id', '=', $id)->update($response);
         return redirect()->route('tintura.index')
@@ -143,7 +148,7 @@ class TinturasController extends Controller
         $request->validate(CsvRules::RULES);
         try {
             $path = $request->file("cvs_file")->getRealPath();
-            $departamentImport = new DBTinturas($path);
+            $departamentImport = new CSVEmployee($path, Tables::TINTURA);
             $departamentImport->insert();
        } catch (\Exception $th) {
             return redirect()
@@ -154,9 +159,6 @@ class TinturasController extends Controller
        return redirect()
             ->route('tintura.index')
             ->with("UPLOAD_SUCCESS", "IS_OK");
-      
-        
-    
     }
 
 }

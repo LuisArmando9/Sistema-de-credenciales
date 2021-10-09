@@ -6,6 +6,16 @@
 <div  class="container">
     <form class="form-material" method="POST" action="{{ route('toallera.store') }}">
         @csrf
+        <div class="form-group @error('id') form-danger @else form-primary @enderror">
+            <input type="text" name="id" class="form-control" value="{{ old('id') }}"   required>
+            <span class="form-bar"></span>
+            <label class="float-label">Folio</label>
+            @error('id')
+                <span class="text-danger" role="alert">
+                    <p>{{ $message }}</p>
+                </span>
+            @enderror
+        </div>
         <div class="form-group @error('worker') form-danger @else form-primary @enderror">
             <input type="text" name="worker" class="form-control" value="{{ old('worker') }}"   required>
             <span class="form-bar"></span>

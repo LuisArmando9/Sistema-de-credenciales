@@ -1,9 +1,8 @@
 <?php
 namespace App\helpers;
-
 use Exception;
 
-class Cvs
+class HCSV
 {
     const EMPTY_ARRAY = 0;
     private $path;

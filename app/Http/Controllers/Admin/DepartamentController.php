@@ -8,7 +8,7 @@ use App\Models\Departament;
 use App\Models\Denomination;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\Rules\CsvRules;
-use App\helpers\DbTables\DBDepartament;
+use App\helpers\Csv\CSVDepartament;
 class DepartamentController extends Controller
 {
     const RULES = [
@@ -138,7 +138,7 @@ class DepartamentController extends Controller
        
        try {
             $path = $request->file("cvs_file")->getRealPath();
-            $departamentImport = new DBDepartament($path);
+            $departamentImport = new CSVDepartament($path);
             $departamentImport->insert();
        } catch (\Exception $th) {
             return redirect()

@@ -12,7 +12,8 @@ use App\Models\Tinturas;
 use App\Models\Toallera;
 use Illuminate\Support\Facades\Storage;
 use App\Models\CCPdf;
-
+use Codedge\Fpdf\Fpdf\Fpdf;
+use App\helpers\Pdf\HPDF;
 
 class PdfController extends Controller
 {
@@ -21,6 +22,7 @@ class PdfController extends Controller
         "maxRange" =>[ "required", "numeric", "gte:minRange", "not_in:0", "gt:0"],
         "denomination" =>["required","string","regex:/TOALLERA|TINTURA/"]
     ];
+    const CREDENTIAL_INCREMENT = 70;
     public function __construct()
     {
         $this->middleware(['role:ADMIN', 'auth']);
@@ -33,10 +35,11 @@ class PdfController extends Controller
      */
     public function index()
     {
+        
         return view("admin.pdf.credentials")->with("workers", DB::table("tintura")
         ->skip(0)
         ->take(19)
-        ->get());
+        ->get())->with("denomination", "Tintura");
     }
 
     /**
@@ -94,7 +97,6 @@ class PdfController extends Controller
         ]);
 
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -113,22 +115,17 @@ class PdfController extends Controller
             $validaton->errors()->add('error_input', 'error text');
             return redirect()->back()->withInput()->withErrors($validaton);
         }
-        $pdf = CCPdf::where( "minRange", $response["minRange"])
-                ->where("maxRange", $response["maxRange"])
-                ->where("denomination",$response["denomination"])
-                ->get();
         $pdfName = $this->getPdfName($response);
-        $credentialsPath =  public_path('credentials/');
-        if($pdf->count() == Constants::EMPTY){
-            $denomination = $response["denomination"];
-            $workers = $this->getWorkerData($request);
-            $pdf = PDF::loadView("admin.pdf.credentials", compact("workers", "denomination"));
-            $this->insertPdfData($response);
-            $pdf->save($credentialsPath.$pdfName);
-            return $pdf->stream($pdfName);
+        $denomination = $response["denomination"];
+        $workers = $this->getWorkerData($request);
+        if($workers->count() > HPDF::MAX_CREDENTIALS){
+            return redirect()->back()->with("PRINT_FAIL", "IS_OK");
         }
-        return redirect("/credentials/{$pdf->first()->pdfName}");
-        
+        $pdf = new HPDF($workers, $denomination);
+        $pdf->writePdfCredential();
+        $this->insertPdfData($response);
+        return $pdf->getOutput($pdfName);
+
     }
 
     /**

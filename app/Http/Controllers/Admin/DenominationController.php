@@ -7,7 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Denomination;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\Rules\CvsRules;
-use App\helpers\DbTables\DBDenomination;
+use App\helpers\Csv\CSVDenomination;
+
 class DenominationController extends Controller
 {
     const RULES = [
@@ -125,7 +126,7 @@ class DenominationController extends Controller
         $request->validate(CsvRules::RULES);
         $path = $request->file("cvs_file")->getRealPath();
         try{
-            $denominationImport = new DBDenomination($path);
+            $denominationImport = new CSVDenomination($path);
             $denominationImport->insert();
         }catch(\Exception $th){
             
