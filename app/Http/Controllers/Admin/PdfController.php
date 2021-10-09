@@ -4,15 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use PDF;
 use Illuminate\Http\Request;
-use App\helpers\DbTables\Constants\Constants;
+use App\helpers\Csv\Constants\Table;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-use App\Models\Tinturas;
-use App\Models\Toallera;
-use Illuminate\Support\Facades\Storage;
 use App\Models\CCPdf;
-use Codedge\Fpdf\Fpdf\Fpdf;
 use App\helpers\Pdf\HPDF;
 
 class PdfController extends Controller
@@ -97,16 +93,6 @@ class PdfController extends Controller
         ]);
 
     }
-<<<<<<< HEAD
-=======
-    private function writeCell($fpdf, $text,  $fontWeigth, $cell=20){
-        $size = strlen($text) > 9 ? 50 : 30;
-        $fpdf->Cell($cell);
-        $fpdf->SetFont('Arial',$fontWeigth,9);
-        $fpdf->Cell($size,5,$text,1,1,'L');
-
-    }
->>>>>>> 1188220 (Upload pdf dile)
     /**
      * Store a newly created resource in storage.
      *
@@ -116,17 +102,16 @@ class PdfController extends Controller
     public function store(Request $request)
     {
         $response = $request->all();
-        if(Toallera::get()->count() == Constants::EMPTY 
-            || Tinturas::get()->count() == Constants::EMPTY){
-                return redirect()->back();
-        }
         $validaton = Validator::make($response, self::RULES);  
         if($validaton->fails()){
             $validaton->errors()->add('error_input', 'error text');
             return redirect()->back()->withInput()->withErrors($validaton);
         }
-        $pdfName = $this->getPdfName($response);
         $denomination = $response["denomination"];
+        if(Table::isEmpty($denomination)){
+            return redirect()->back();
+        }
+        $pdfName = $this->getPdfName($response);
         $workers = $this->getWorkerData($request);
         if($workers->count() > HPDF::MAX_CREDENTIALS){
             return redirect()->back()->with("PRINT_FAIL", "IS_OK");

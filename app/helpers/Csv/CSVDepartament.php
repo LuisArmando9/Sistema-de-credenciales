@@ -1,19 +1,20 @@
 <?php
-namespace App\helpers\CSV;
+namespace App\helpers\Csv;
 
-use App\helpers\Csv\Constants\Tables;
 use App\helpers\Csv\CSV;
-use App\Models\Denomination;
+use App\helpers\Csv\Constants\Table;
 use App\helpers\Csv\Constants\Constants;
+use App\Models\Denomination;
 use Exception;
+
 class CSVDepartament extends CSV{
 
-    protected $tableName = Tables::DEPARTAMENT;
-    private $denominationMask;
-    private function isValidDenominationId($id)
-    {
+    protected $tableName = Table::DEPARTAMENT;
+    protected $denominationMask;
+    private function isValidDenominationId($id){
         $offset = 1 << $id;
-        return ( $offset  & $this->denominationMask) ==  $offset;
+        return ($offset &  $this->denominationMask) == $offset;
+
     }
     private function validateCsv(){
         foreach($this->array as $data){
@@ -26,14 +27,14 @@ class CSVDepartament extends CSV{
     }
     public function __construct($path)
     {
-        parent::__construct($path);   
-        $denominations = Denomination::get()->pluck("id");
-        if($denominations->count() == Constants::EMPTY){
-           throw new Exception("No contiene ningun registro asociado a la tabla de razon social"); 
+        parent::__construct($path);
+        if(Table::isEmpty(Table::DENOMINATION)){
+            throw new Exception("No hay ninguna razon social registrada.");
         }
-        foreach($denominations as $id){
+        foreach(Denomination::get()->pluck("id") as $id){
             $this->denominationMask |= 1<<$id;
         }
-        $this->validateCsv();
+        $this->validateCsv();   
     }
+
 }

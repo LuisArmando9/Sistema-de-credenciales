@@ -7,11 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Denomination;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\Rules\CvsRules;
-<<<<<<< HEAD
+use App\helpers\Csv\Constants\Table;
 use App\helpers\Csv\CSVDenomination;
-=======
-use App\helpers\DbTables\DBDenomination;
->>>>>>> 1188220 (Upload pdf dile)
+use App\helpers\Csv\CSVEmployee;
 
 class DenominationController extends Controller
 {

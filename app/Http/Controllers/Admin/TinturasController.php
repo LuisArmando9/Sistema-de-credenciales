@@ -6,8 +6,9 @@ use App\Models\Tinturas;
 use App\Models\Departament;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\Rules\CsvRules;
-use App\helpers\Csv\CSVEmployee;
-use App\helpers\Csv\Constants\Tables;
+use App\helpers\Csv\CSVWorker;
+use App\helpers\Csv\Constants\Table;
+use App\Http\Controllers\Admin\ToalleraController;
 use App\Http\Controllers\Admin\Rules\WorkerRules;
 
 /**
@@ -16,6 +17,7 @@ use App\Http\Controllers\Admin\Rules\WorkerRules;
  */
 class TinturasController extends Controller
 {
+    
     public function __construct()
     {
         $this->middleware(['role:ADMIN', 'auth']);
@@ -66,7 +68,7 @@ class TinturasController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(WorkerRules::getRulesWithId(Tables::TINTURA));
+        $request->validate(WorkerRules::getRulesWithId(Table::TINTURA));
         $response = $request->except(['_token']);
         
         try {
@@ -113,11 +115,11 @@ class TinturasController extends Controller
     public function update(Request $request, $id)
     {
         Tinturas::findOrfail($id);
-        $tempId = $request->post("id");
-        if($tempId == $id){
+   
+        if($request->post("id") ==  $id){
             $request->validate(WorkerRules::RULES);
         }else{
-            $request->validate(WorkerRules::getRulesWithId(Tables::TINTURA));
+            $request->validate(WorkerRules::getRulesWithId(Table::TINTURA));
         }
         $response = $request->except(['_token', "_method"]);
         Tinturas::where('id', '=', $id)->update($response);
@@ -148,7 +150,7 @@ class TinturasController extends Controller
         $request->validate(CsvRules::RULES);
         try {
             $path = $request->file("cvs_file")->getRealPath();
-            $departamentImport = new CSVEmployee($path, Tables::TINTURA);
+            $departamentImport = new CSVWorker($path, Table::TINTURA);
             $departamentImport->insert();
        } catch (\Exception $th) {
             return redirect()
@@ -159,6 +161,9 @@ class TinturasController extends Controller
        return redirect()
             ->route('tintura.index')
             ->with("UPLOAD_SUCCESS", "IS_OK");
+      
+        
+    
     }
 
 }

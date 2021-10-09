@@ -14,7 +14,7 @@ class Tintura extends Migration
     public function up()
     {
         Schema::create('tintura', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
+            $table->unsignedBigInteger("id")->primary();
             $table->string("worker", 100);
             $table->string("curp", 25);
             $table->boolean("active");

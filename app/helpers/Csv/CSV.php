@@ -1,47 +1,24 @@
 <?php
 namespace App\helpers\Csv;
-use Illuminate\Support\Facades\DB;
-use App\helpers\Csv\Constants\Tables;
-use App\helpers\Csv\Constants\Constants;
-use Exception;
-use App\helpers\HCSV;
 
-class CSV implements ICSV{
+use App\helpers\Csv\Constants\Constants;
+use App\helpers\Csv\Constants\Table;
+use Illuminate\Support\Facades\DB;
+use App\helpers\HCsv;
+use Exception;
+class CSV implements ICSV {
     protected $tableName;
     protected $array;
-    public function __construct($path)
-    {
-        $csv = new HCSV($path);
-        $this->array = $csv->toArray();
-        $registerNumber = DB::table($this->tableName)->get()->count();
-        if(Constants::isEmpty($this->array)){
-            throw new Exception("El csv esta vacio");
-        }
-
-    }
-    private function isTableWorker(){
-        return $this->tableName == Tables::TINTURA 
-            || $this->tableName == Tables::TOALLERA;
-
-    }
     public function cleanTable(){
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
         DB::table($this->tableName)->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
-    }
-    public function isEmpyTable($tablename=null){
-        $tempTableName = $this->tableName;
-        if(!is_null($tablename)){
-            $tempTableName = $tablename;
-        }
-        return DB::table($tempTableName)
-        ->get()->count() 
-        == Constants::EMPTY;
-        
+
     }
     public function getFieldsOfTable(){
-        if($this->isTableWorker()){
-            $fieldsOfTable = function($data){
+
+        if(Table::isWorkerTable($this->tableName)){
+            $fieldOfTable =  function($data){
                 return array(
                     "worker" => $data[Constants::WORKER_NAME],
                     "curp" => $data[Constants::WORKER_CURP],
@@ -54,9 +31,10 @@ class CSV implements ICSV{
                     "active" => 1
                 );
             };
-        }else{
-            $fieldsOfTable = match($this->tableName){
-                Tables::DEPARTAMENT => function($data){
+        }
+        else{
+            $fieldOfTable = match($this->tableName){
+                Table::DEPARTAMENT => function($data){
                     return array(
                         "id" => $data[Constants::DEPARTAMENT_ID_FOR_TABLE],
                         "departamentName" => $data[Constants::DEPARTAMENT_NAME],
@@ -65,7 +43,7 @@ class CSV implements ICSV{
                         "updated_at" => date("Y-m-d H:i:s"),
                         );
                 },
-                Tables::DENONINATION => function($data){
+                Table::DENOMINATION => function($data){
                     return array(
                         "id" => $data[Constants::DEPARTAMENT_ID_FOR_TABLE],
                         "denominationName" => $data[Constants::DEPARTAMENT_NAME],
@@ -74,28 +52,25 @@ class CSV implements ICSV{
                         );
 
                 },
-                default => throw new Exception("Nombre de la tabla es invalido ")
+                default => throw new \Exception('Unsupported'),
             };
-            
         }
-        return $fieldsOfTable;
+        return $fieldOfTable;
 
     }
     public function getTableData(){
+        $fieldsOfTable = $this->getFieldsOfTable();
         $newData = array();
-        $fieldOfTable = $this->getFieldsOfTable();
-        foreach ($this->array as $data) {
-            array_push($newData,  $fieldOfTable($data));
+        foreach($this->array as $data){
+            array_push($newData, $fieldsOfTable($data));
         }
         return $newData;
-        
     }
-
-    public function insert($array=null){
+    public  function insert($array=null){
         if(!is_null($array)){
             $this->array = $array;
         }
-        if($this->isEmpyTable()){
+        if(Table::isEmpty($this->tableName)){
             $this->cleanTable();
         }
         DB::beginTransaction();
@@ -105,7 +80,16 @@ class CSV implements ICSV{
         } catch (\Exception $th) {
             DB::rollback();
             throw new Exception("Error al insertar, verifiqué sus campos del csv.");
-        } 
+        }
+
+    }
+    public function __construct($path)
+    {
+        $csv = new HCSV($path);
+        $this->array = $csv->toArray();
+        if(Constants::isEmpty($this->array)){
+            throw new Exception("El archivo csv esta vacio");
+        }
 
     }
 }

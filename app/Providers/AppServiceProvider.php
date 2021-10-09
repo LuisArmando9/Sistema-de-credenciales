@@ -28,9 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(UrlGenerator $url)
     {
-       if (config('app.env') === 'production') {
-                URL::forceScheme('https');
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
         }
+
         Validator::extend('alpha_spaces', function ($attribute, $value) {
 
             // This will only accept alpha and spaces. 

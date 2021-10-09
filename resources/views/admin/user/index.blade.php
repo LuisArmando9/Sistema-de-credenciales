@@ -67,13 +67,14 @@
         </table>
     @endif
 </div>
-@endsection
 {{-- Pagination --}}
 @if($containsPaginate)
     <div class="d-flex justify-content-center">
     {!! $users->links() !!}
     </div>
 @endif
+@endsection
+
 @section("customScripts")
 <script type="text/javascript" src="{{ asset('js/custom/alert.js') }}"></script>
 @if(session("DELETE") == "IS_OK")
