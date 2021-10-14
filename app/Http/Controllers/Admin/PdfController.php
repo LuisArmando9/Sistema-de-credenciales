@@ -32,10 +32,7 @@ class PdfController extends Controller
     public function index()
     {
         
-        return view("admin.pdf.credentials")->with("workers", DB::table("tintura")
-        ->skip(0)
-        ->take(19)
-        ->get())->with("denomination", "Tintura");
+
     }
 
     /**
@@ -83,7 +80,7 @@ class PdfController extends Controller
             $credentialsNumber = 1;
         }
         $credentialsNumber =  $maxRange -  $minRange ;
-        var_dump($this->getPdfName($data));
+
         CCPdf::create([
             "pdfName" => $this->getPdfName($data),
             "minRange" =>  $minRange,
@@ -109,12 +106,14 @@ class PdfController extends Controller
         }
         $denomination = $response["denomination"];
         if(Table::isEmpty($denomination)){
-            return redirect()->back();
+            return redirect()->back()
+            ->with("toast_error", "La tabla {$denomination} se encuentra vacia.");
         }
         $pdfName = $this->getPdfName($response);
         $workers = $this->getWorkerData($request);
         if($workers->count() > HPDF::MAX_CREDENTIALS){
-            return redirect()->back()->with("PRINT_FAIL", "IS_OK");
+            return redirect()->back()->with("toast_error", 
+            "El número máximo de credenciales son 50.");
         }
         $pdf = new HPDF($workers, $denomination);
         $pdf->writePdfCredential();

@@ -16,6 +16,7 @@ class Toallera extends Model
         'nss',
         'departamentId',
         'entry',
-        'active'
+        'active',
+        'id'
     ];
 }

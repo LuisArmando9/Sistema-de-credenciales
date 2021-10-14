@@ -14,7 +14,8 @@ class Departament extends Model
     public $timestamps = true;
     protected $fillable = [
         'denominationId',
-        'departamentName'
+        'departamentName',
+        'id'
     ];
     public static  function isEmpty()
     {

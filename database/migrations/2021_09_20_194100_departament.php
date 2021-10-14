@@ -14,7 +14,7 @@ class Departament extends Migration
     public function up()
     {
         Schema::create('departament', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger("id")->primary();
             $table->string('departamentName', 50);
             $table->unsignedBigInteger('denominationId');
             $table->foreign('denominationId')->references('id')->on('denomination');

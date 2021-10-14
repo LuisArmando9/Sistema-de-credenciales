@@ -74,34 +74,8 @@
     </div>
 @endif
 @endsection
-
 @section("customScripts")
 <script type="text/javascript" src="{{ asset('js/custom/alert.js') }}"></script>
-@if(session("DELETE") == "IS_OK")
-    <script>
-        showSuccessAlert("Eliminado", "se ha eliminado el registro");
-    </script>
-@elseif(session("DELETE_ERROR") == "IS_OK")
-    <script>
-      showSuccessAlert("Error", "No se puede eliminar <b>{{session('Name')}}</b>, debe eliminar las asociaciones.", "warning");
-    </script>
-@elseif(session("UPDATE") == "IS_OK")
-    <script>
-        showSuccessAlert("Actualizado", "se ha actualizado el registro");
-    </script>
-@elseif(session("UPLOAD_ERROR") == "IS_OK")
-    <script>
-        showSuccessAlert("Error", "{{session('message')}}", "warning");
-    </script>
-@elseif(session("UPLOAD_SUCCESS") == "IS_OK")
-    <script>
-        showSuccessAlert("Actualizado", "Se ha exportado correctamente");
-    </script>
-@elseif(session("INSERT") == "IS_OK")
-    <script>
-        showSuccessAlert("Creado", "se ha creado un nuevo registro");
-    </script>
-@endif
 <script type="text/javascript" src="{{ asset('js/custom/upload.js') }}"></script>
 @endsection
 

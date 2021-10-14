@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Admin\ResetTablesController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,6 +15,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('auth.login');
+});
+Route::middleware(['role:ADMIN', 'auth'])->group(function () {
+    Route::post("/resetall",[ResetTablesController::class, "resetAll"]);
+    Route::post("/resettintura", [ResetTablesController::class, "resetTintura"]);
+    Route::post("/resettoallera", [ResetTablesController::class, "resetToallera"]);
+    Route::post("/resetdepartament", [ResetTablesController::class, "resetDepartament"]);
+    Route::post("/resetdenomination", [ResetTablesController::class, "resetDenomination"]);
+   
 });
 
 Auth::routes();

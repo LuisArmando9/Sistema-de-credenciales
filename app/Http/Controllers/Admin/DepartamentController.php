@@ -8,14 +8,16 @@ use App\Models\Departament;
 use App\Models\Denomination;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\Rules\CsvRules;
+use App\Http\Controllers\Admin\Rules\DepartamentRules;
 use App\helpers\Csv\CSVDepartament;
 class DepartamentController extends Controller
 {
     const RULES = [
         "departamentName" => 'required|alpha_spaces',
-        "denominationId" => 'required|numeric'
+        "denominationId" => 'required|numeric',
+        "id" => "required|numeric|unique:Departament"
     ];
-    const MAX_PAGINATION = 20;
+
     public function __construct()
     {
         $this->middleware(['role:ADMIN', 'auth']);
@@ -57,15 +59,16 @@ class DepartamentController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(self::RULES);
+        $request->validate(DepartamentRules::getRulesWithId());
         $response = $request->except(['_token']);
+        Departament::create($response);
         try {
             Departament::create($response);
         } catch (\Illuminate\Database\QueryException $th) {
-            return redirect()->route('departament.create')->with("_INSERT", "_IS_NOT");
+            return redirect()->route('departament.create')->with("toast_error", "No se pudo crear el departamento.");
         }     
         return redirect()->route('departament.index')  
-        ->with("INSERT", "IS_OK");
+        ->with("toast_error", "Se ha creado el departamento{$response['departamentName']}");
 
     }
 
@@ -104,11 +107,24 @@ class DepartamentController extends Controller
     public function update(Request $request, $id)
     {
         Departament::findOrfail($id);
-        $request->validate(self::RULES);
+        
+        if($request->post("id") ==  $id){
+            $request->validate(DepartamentRules::RULES);
+        }else{
+            $request->validate(DepartamentRules::getRulesWithId());
+        }
         $response = $request->except(['_token', "_method"]);
-        Departament::where('id', '=', $id)->update($response);
+        try{
+    
+            Departament::where('id', '=', $id)->update($response);
+        }catch(\Exception){
+           return  redirect()->route('departament.index')
+            ->with("toast_error",
+            "<small>No se puede actulizar el id del departamento: <b>{$response['departamentName']}</b>, muchas áreas depende de el. </small>");
+        }
         return redirect()->route('departament.index')
-        ->with("UPDATE", "IS_OK");
+        ->with("toast_success",
+        "<small>Se actualizo correctamente el departamento: <b>{$response['departamentName']}</b> </small>");
     }
 
     /**
@@ -123,10 +139,12 @@ class DepartamentController extends Controller
         try {
             $departmanet->delete();
         } catch (\Illuminate\Database\QueryException  $th) {
-            return redirect()->route('departament.index')->with("DELETE_ERROR", "IS_OK")
-            ->with("Name", $departmanet->departamentName );
+            return redirect()->route('departament.index')
+            ->with("toast_error", "No se pudo eliminar el departamento {$departmanet->departamentName}");
         }
-        return redirect()->route('departament.index')->with("DELETE", "IS_OK");
+        return redirect()->route('departament.index')
+            ->withSuccess(
+            "Se ha eliminado correctamente el departamento: {$departmanet->departamentName}");
     }
      /**
      * Upload the specified resource from storage.
@@ -143,11 +161,10 @@ class DepartamentController extends Controller
        } catch (\Exception $th) {
             return redirect()
             ->route('departament.index')
-            ->with("UPLOAD_ERROR", "IS_OK")
-            ->with("message", $th->getMessage());
+            ->with("toast_error", $th->getMessage());
        }
        return redirect()
             ->route('departament.index')
-            ->with("UPLOAD_SUCCESS", "IS_OK");
+            ->with("toast_success", "Se ha insertado los datos del csv.");
     }
 }

@@ -16,6 +16,7 @@ class Tinturas extends Model
         'nss',
         'departamentId',
         'entry',
-        'active'
+        'active',
+        'id'
     ];
 }

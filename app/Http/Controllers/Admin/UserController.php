@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\helpers\DbTables\Constants\Constants;
+use App\helpers\Csv\Constants\Constants;
 use App\Models\User;
-use App\Http\Controllers\Admin\ToalleraController;
+use App\Http\Controllers\Admin\Rules\WorkerRules;
 use Exception;
-use PhpParser\Node\Stmt\Foreach_;
+
 
 class UserController extends Controller
 {
@@ -38,7 +38,7 @@ class UserController extends Controller
             ->with("users", User::paginate())
             ->with("containsPaginate", true);
         }
-        $request->validate(ToalleraController::RULES_SEARCH);
+        $request->validate(WorkerRules::SEARCH);
         return view("admin.user.index")
             ->with("users", User::where("id", $response)->get())
             ->with("containsPaginate", false);
@@ -70,7 +70,7 @@ class UserController extends Controller
         $user  = User::create($response);
         $user->assignRole($request["typeUser"]);
         return redirect()->route('useradmin.index')  
-        ->with("INSERT", "IS_OK");
+        ->with("toast_success", "Se ha creado un nuevo usuario correctamente.");
     }
 
     /**
@@ -149,7 +149,7 @@ class UserController extends Controller
      
         User::where('id', $id)->update($newData);
         return redirect()->route('useradmin.index')
-        ->with("UPDATE", "IS_OK");
+        ->with("toast_success", "Se ha actualizado correctamente el usuario");
     }
 
     /**
@@ -158,10 +158,17 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findOrfail($id);
-        $user->delete();
+        try{
+            $user = User::findOrfail($id);
+            $user->delete();
+        }catch(\Exception $e){
+            return redirect()->
+            route('useradmin.index')->
+            with("toast_error", "No se puedo eliminar el usuario.");
+
+        }
         return redirect()->
             route('useradmin.index')->
-            with("DELETE", "IS_OK");
+            with("toast_success", "Se ha eliminado correctamente el usuario");
     }
 }

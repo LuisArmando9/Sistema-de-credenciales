@@ -13,28 +13,7 @@ use Exception;
 
 class ToalleraController extends Controller
 {
-    const RULES = [
-        "worker" => "required|alpha_spaces",
-        "curp" => [
-            "required",
-            "string",
-            "min:18",
-            "max:18",
-            "regex:/^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/",
-        ],
-        "nss" => "required|numeric|digits:11",
-        "departamentId"  => "required|numeric",
-        "entry" => "required|date",
-        "active" =>"required|boolean"
-    ];
-    const RULES_SEARCH =[
-        "search" =>
-        [
-            "required",
-            "numeric",
-        ]
-    ];
-
+  
     public function __construct()
     {
         $this->middleware(['role:ADMIN', 'auth']);
@@ -92,10 +71,11 @@ class ToalleraController extends Controller
         try {
             Toallera::create($response);
         } catch (\Illuminate\Database\QueryException $th) {
-            return redirect()->route('toallera.create')->with("_INSERT", "_IS_NOT");
+            return redirect()->route('toallera.create')
+            ->with("toast_error", "No se puedo crear  el registro.");
         }
         return redirect()->route('toallera.index')  
-        ->with("INSERT", "IS_OK");
+        ->with("toast_success", "Se ha creado un nuevo empleado.");
     }
 
     /**
@@ -140,7 +120,7 @@ class ToalleraController extends Controller
         $response = $request->except(['_token', "_method"]);
         Toallera::where('id', '=', $id)->update($response);
         return redirect()->route('toallera.index')
-        ->with("UPDATE", "IS_OK");
+        ->with("toast_succes", "Se actualizo los datos del empleado {$response['worker']}");
     }
 
     /**
@@ -153,7 +133,8 @@ class ToalleraController extends Controller
     {
         $worker = Toallera::findOrfail($id);
         $worker->delete();
-        return redirect()->route('toallera.index')->with("DELETE", "IS_OK");
+        return redirect()->route('toallera.index')
+        ->with("toast_success", "Se ha eliminado el empleado{$worker->worker}");
         //
     }
     /**
@@ -171,12 +152,11 @@ class ToalleraController extends Controller
        } catch (\Exception $th) {
             return redirect()
             ->route('toallera.index')
-            ->with("UPLOAD_ERROR", "IS_OK")
-            ->with("message", $th->getMessage());
+            ->with("toast_error", $th->getMessage());
        }
        return redirect()
             ->route('toallera.index')
-            ->with("UPLOAD_SUCCESS", "IS_OK");
+            ->with("toast_success", "Se han insertado los datos del csv");
 
     }
 }

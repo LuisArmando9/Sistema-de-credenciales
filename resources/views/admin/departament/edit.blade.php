@@ -8,6 +8,16 @@
     <form class="form-material" method="POST" action="{{route('departament.update', $departament->id)}}">
         @csrf
         @method("PUT")
+        <div class="form-group @error('id') form-danger @else form-primary @enderror">
+            <input type="number" name="id" class="form-control"  value="@error('id'){{old('id')}}@else{{$departament->id}}@enderror"     required>
+            <span class="form-bar"></span>
+            <label class="float-label">ID</label>
+            @error('id')
+                <span class="text-danger" role="alert">
+                    <p>{{ $message }}</p>
+                </span>
+            @enderror
+        </div>
         <div class="form-group @error('denominationName') form-danger @else form-primary @enderror">
             <input type="text" name="departamentName" class="form-control"  value=" @error('departamentName') {{ old('departamentName') }} @else {{$departament->departamentName}} @enderror"     required>
             <span class="form-bar"></span>

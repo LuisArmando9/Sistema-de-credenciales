@@ -124,7 +124,8 @@ class TinturasController extends Controller
         $response = $request->except(['_token', "_method"]);
         Tinturas::where('id', '=', $id)->update($response);
         return redirect()->route('tintura.index')
-        ->with("UPDATE", "IS_OK");
+        ->with("toast_success",
+         "Se ha actualizado correctamente los datos del trabajador{$response['worker']}");
     }
 
     /**
@@ -137,7 +138,9 @@ class TinturasController extends Controller
     {
         $worker = Tinturas::findOrfail($id);
         $worker->delete();
-        return redirect()->route('tintura.index')->with("DELETE", "IS_OK");
+        return redirect()->route('tintura.index')
+        ->with("toast_success", 
+        "Se ha eliminado el trabajador{$worker->$worker}");
         //
     }
       /**
@@ -155,12 +158,11 @@ class TinturasController extends Controller
        } catch (\Exception $th) {
             return redirect()
             ->route('tintura.index')
-            ->with("UPLOAD_ERROR", "IS_OK")
-            ->with("message", $th->getMessage());
+            ->with("toast_error", $th->getMessage());
        }
        return redirect()
             ->route('tintura.index')
-            ->with("UPLOAD_SUCCESS", "IS_OK");
+            ->with("toast_success", "Se han insertado los datos del csv");
       
         
     

@@ -172,6 +172,16 @@
                                         </a>
                                     </li>
                                 </ul>
+                                <ul class="pcoded-item pcoded-left-item">
+                                    <li >
+                                        <a href="#" class="waves-effect waves-dark">
+                                            <form method="POST" action="/resetall">
+                                                @csrf
+                                                <button type="submit" class="btn waves-effect waves-light btn-primary btn-outline-primary ">RESETEAR TABLAS</button>
+                                            </form>
+                                        </a>
+                                    </li>
+                                </ul>
                             @else
                                 <div class="pcoded-navigation-label" data-i18n="nav.category.navigation">Datos</div>
                                 <ul class="pcoded-item pcoded-left-item">

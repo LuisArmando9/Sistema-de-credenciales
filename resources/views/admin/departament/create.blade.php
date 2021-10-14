@@ -6,6 +6,16 @@
 <div class="container">
     <form class="form-material" method="POST" action="{{route('departament.store')}}">
     @csrf
+        <div class="form-group @error('id') form-danger @else form-primary @enderror">
+            <input type="number" name="id" class="form-control"  value="{{ old('id') }}"     required>
+            <span class="form-bar"></span>
+            <label class="float-label">ID</label>
+            @error('id')
+                <span class="text-danger" role="alert">
+                    <p>{{ $message }}</p>
+                </span>
+            @enderror
+        </div>
         <div class="form-group @error('denominationName') form-danger @else form-primary @enderror">
             <input type="text" name="departamentName" class="form-control" value="{{ old('departamentName') }}"   required>
             <span class="form-bar"></span>

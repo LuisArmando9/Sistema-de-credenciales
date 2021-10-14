@@ -92,6 +92,7 @@
     <div id="app">
         @yield('content')
     </div>
+    @include('sweetalert::alert')
   <!-- #region -->
   
     <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>

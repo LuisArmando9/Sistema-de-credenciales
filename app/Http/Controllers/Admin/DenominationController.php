@@ -6,15 +6,13 @@ use App\Http\Controllers\Admin\Rules\CsvRules;
 use App\Http\Controllers\Controller;
 use App\Models\Denomination;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Admin\Rules\CvsRules;
-use App\helpers\Csv\Constants\Table;
 use App\helpers\Csv\CSVDenomination;
-use App\helpers\Csv\CSVEmployee;
+
 
 class DenominationController extends Controller
 {
     const RULES = [
-        "denominationName" => 'required|alpha_spaces'
+        "denominationName" => 'required|string|min:2|max:255'
     ];
     public function __construct()
     {
@@ -55,7 +53,9 @@ class DenominationController extends Controller
         $request->validate(self::RULES);
         $response = $request->except(['_token']);
         Denomination::create( $response);
-        return redirect()->route('denomination.index');
+        $denominationName = $request["denominationName"];
+        return redirect()->route('denomination.index')
+        ->withSuccess("Se ha insertadp la razón social:{$denominationName}");
         
     }
 
@@ -97,7 +97,7 @@ class DenominationController extends Controller
         $response = $request->except(['_token', "_method"]);
         Denomination::where('id', '=', $id)->update($response);
         return redirect()->route('denomination.index') 
-        ->with("UPDATE", "IS_OK");
+        ->with("toast_success","Se actualizo correctamente {$response['denominationName']}");
 
     }
 
@@ -113,10 +113,11 @@ class DenominationController extends Controller
         try {
                 $denomination->delete();
         } catch (\Illuminate\Database\QueryException  $th) {
-                return redirect()->route('denomination.index')->with("DELETE_ERROR", "IS_OK")
-                ->with("Name", $denomination->denominationName );
+                return redirect()->route('denomination.index')
+                ->with("toast_error", "Error al intentar eliminar{$denomination->denominationName}");
         }
-       return redirect()->route('denomination.index')->with("DELETE", "IS_OK");
+       return redirect()->route('denomination.index')
+        ->with("toast_success", "Se elimino correctamente{{$denomination->denominationName}");
 
     }
     /**
@@ -133,10 +134,9 @@ class DenominationController extends Controller
         }catch(\Exception $th){
             
             return redirect()->route('denomination.index')
-            ->with("UPLOAD_ERROR", "IS_OK")
-            ->with("message", $th->getMessage());
+            ->with("toast_error", $th->getMessage());
         }
         return redirect()->route('denomination.index')
-            ->with("UPLOAD_SUCCESS", "IS_OK");
+            ->with("toast_success", "Se han insertado los datos del csv.");
     }
 }
