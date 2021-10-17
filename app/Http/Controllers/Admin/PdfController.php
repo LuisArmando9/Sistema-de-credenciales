@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\helpers\Csv\Constants\Constants;
 use PDF;
 use Illuminate\Http\Request;
 use App\helpers\Csv\Constants\Table;
@@ -65,10 +66,10 @@ class PdfController extends Controller
             return DB::table($workerTable)
             ->where("id", $response["minRange"])->get();
         }
-        $start = (int)$response["minRange"];
-        $offset = (int)$response["maxRange"] - $start;
+        $offset = $response["maxRange"] -$response["minRange"];
         return DB::table($workerTable)
-        ->skip($start-1)
+        ->where("id", ">=", $response["minRange"])
+        ->skip(0)
         ->take($offset)
         ->get();
     }
@@ -114,6 +115,10 @@ class PdfController extends Controller
         if($workers->count() > HPDF::MAX_CREDENTIALS){
             return redirect()->back()->with("toast_error", 
             "El número máximo de credenciales son 50.");
+        }
+        if($workers->count() == Constants::EMPTY){
+            return redirect()->back()->with("toast_error", 
+            "Los folio(s) estan vaciós.");
         }
         $pdf = new HPDF($workers, $denomination);
         $pdf->writePdfCredential();

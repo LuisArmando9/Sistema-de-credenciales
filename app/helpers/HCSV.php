@@ -15,9 +15,13 @@ class HCSV
     }
     public function toArray()
     { 
-        $this->array = array_map('str_getcsv',
-            file($this->path));
-        return $this->array;
+        $this->array = array_map("utf8_encode",file($this->path));
+        $csvLines = array();
+        foreach($this->array as $csvline)
+        {
+            array_push($csvLines, explode(',', $csvline));
+        }
+        return $csvLines;
         
     }
 }

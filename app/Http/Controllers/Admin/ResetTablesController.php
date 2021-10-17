@@ -8,7 +8,9 @@ class ResetTablesController extends Controller
 
     private function resetTable($table){
         try{
-            DB::table($table)->delete();
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
+            DB::table($table)->truncate();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
         }catch(\Exception $e){
             return back()
             ->with("toast_error", "<small>No se puede resetear la tabla: <b>{$table}</b>, contiene dependecias.</small>");

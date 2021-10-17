@@ -111,8 +111,8 @@
                         @endif
                         <td>{{$worker->nss}}</td>
                         <td>
-                            <form  class="form-material form-delete"  action="{{ route('toallera.destroy', $worker->id)}}", method="POST">
-                                <a class="btn waves-effect waves-light btn-danger" href="{{ route('toallera.edit', $worker->id)}}"><i class="icofont icofont-pencil-alt-1"></i></a>
+                            <form  class="form-material form-delete"  action="{{ route('tintura.destroy', $worker->id)}}", method="POST">
+                                <a class="btn waves-effect waves-light btn-danger" href="{{ route('tintura.edit', $worker->id)}}"><i class="icofont icofont-pencil-alt-1"></i></a>
                                 @csrf
                                 @method("DELETE")
                                 <button type="submit" class="btn waves-effect waves-light btn-success"><i class="icofont icofont-trash"></i></button>

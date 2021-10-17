@@ -2,7 +2,7 @@
 namespace App\helpers\Pdf;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use Exception;
-use phpDocumentor\Reflection\Types\Self_;
+use App\helpers\_Date;
 use App\Models\Departament;
 
 class HPDF{
@@ -74,7 +74,9 @@ class HPDF{
         for($i=0; $i<$startLastName; $i++){
             $name .= " " . $tempSplitName[$i];
         }
-        return array("NAME" => strtoupper($name), "LASTNAME" =>strtoupper($lastName));
+        return array("NAME" => 
+        utf8_decode(strtoupper($name)), "LASTNAME" =>
+        utf8_decode(strtoupper($lastName)));
     }
     private function writeTitle($i){
         $this->fpdf->SetFont('Arial', 'B', self::FONT_SIZE_FOR_TITLE);
@@ -95,8 +97,8 @@ class HPDF{
         $this->fpdf->Text(self::BACK_FOLIO_X, self::BACK_FOLIO_AND_DEPARTAMENT_Y+$i,
         $worker->id);
         $this->fpdf->Text(self::BACK_DESCRIPTION_X,  self::BACK_FOLIO_AND_DEPARTAMENT_Y+$i,
-        $this->departaments[$worker->departamentId]);
-        $this->fpdf->Text(self::BACK_DESCRIPTION_X, self::BACK_ENTRY_Y+$i,$worker->entry);
+        utf8_decode($this->departaments[$worker->departamentId]));
+        $this->fpdf->Text(self::BACK_DESCRIPTION_X, self::BACK_ENTRY_Y+$i, _Date::parse($worker->entry));
     }
     private function writeCredential($worker){
       

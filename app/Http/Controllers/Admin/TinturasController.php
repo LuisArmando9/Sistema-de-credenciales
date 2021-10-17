@@ -74,7 +74,8 @@ class TinturasController extends Controller
         try {
             Tinturas::create($response);
         } catch (\Illuminate\Database\QueryException $th) {
-            return redirect()->route('tintura.create')->with("_INSERT", "_IS_NOT");
+            return redirect()->route('tintura.create')->with("toast_success",
+            "<small>Se ha creado correctamente un nuevo trabajador: <b>{$response['worker']}</b></small>");
         }
         return redirect()->route('tintura.index')  
         ->with("INSERT", "IS_OK");
@@ -125,7 +126,7 @@ class TinturasController extends Controller
         Tinturas::where('id', '=', $id)->update($response);
         return redirect()->route('tintura.index')
         ->with("toast_success",
-         "Se ha actualizado correctamente los datos del trabajador{$response['worker']}");
+         "<small>Se ha actualizado correctamente los datos del trabajador: <b>{$response['worker']}</b></small>");
     }
 
     /**
@@ -140,7 +141,7 @@ class TinturasController extends Controller
         $worker->delete();
         return redirect()->route('tintura.index')
         ->with("toast_success", 
-        "Se ha eliminado el trabajador{$worker->$worker}");
+        "<small>Se ha eliminado el trabajador</small>:<b>{$worker->$worker}</b>");
         //
     }
       /**

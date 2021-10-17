@@ -55,7 +55,7 @@ class DenominationController extends Controller
         Denomination::create( $response);
         $denominationName = $request["denominationName"];
         return redirect()->route('denomination.index')
-        ->withSuccess("Se ha insertadp la razón social:{$denominationName}");
+        ->with("toast_succes","Se ha insertado la razón social:{$denominationName}");
         
     }
 
@@ -117,7 +117,7 @@ class DenominationController extends Controller
                 ->with("toast_error", "Error al intentar eliminar{$denomination->denominationName}");
         }
        return redirect()->route('denomination.index')
-        ->with("toast_success", "Se elimino correctamente{{$denomination->denominationName}");
+        ->with("toast_success", "Se elimino correctamente {{$denomination->denominationName}");
 
     }
     /**

@@ -23,6 +23,7 @@ class CSVDepartament extends CSV{
                 throw new Exception("El ID {$data[Constants::DENOMINATION_ID]} de la razón social es desconocido");
             }
         }
+       
 
     }
     public function __construct($path)
