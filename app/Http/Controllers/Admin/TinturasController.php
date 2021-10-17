@@ -17,11 +17,6 @@ use App\Http\Controllers\Admin\Rules\WorkerRules;
  */
 class TinturasController extends Controller
 {
-    
-    public function __construct()
-    {
-        $this->middleware(['role:ADMIN', 'auth']);
-    }
     /**
      * Display a listing of the resource.
      *

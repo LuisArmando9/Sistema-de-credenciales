@@ -35,6 +35,7 @@ class Constants {
     /***
     * END
     */
+    const MIN_RESULT = 1;
     public static function isEmpty($data){
         return count($data) == self::EMPTY;
     }

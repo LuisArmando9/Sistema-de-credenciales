@@ -1,20 +1,16 @@
 <?php
 namespace App\helpers\Csv;
 
+
 use App\helpers\Csv\Constants\Constants;
 use App\helpers\Csv\Constants\Table;
 use Illuminate\Support\Facades\DB;
-use App\helpers\HCsv;
+use App\helpers\HCSV;
 use Exception;
 class CSV implements ICSV {
     protected $tableName;
     protected $array;
-    public function cleanTable(){
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
-        DB::table($this->tableName)->truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
-
-    }
+   
     public function getFieldsOfTable(){
 
         if(Table::isWorkerTable($this->tableName)){
@@ -71,7 +67,7 @@ class CSV implements ICSV {
             $this->array = $array;
         }
         if(Table::isEmpty($this->tableName)){
-            $this->cleanTable();
+            Table::clean($this->tableName);
         }
         DB::beginTransaction();
         try {

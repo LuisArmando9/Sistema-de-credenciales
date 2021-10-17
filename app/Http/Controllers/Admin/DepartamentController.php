@@ -17,12 +17,6 @@ class DepartamentController extends Controller
         "denominationId" => 'required|numeric',
         "id" => "required|numeric|unique:Departament"
     ];
-
-    public function __construct()
-    {
-        $this->middleware(['role:ADMIN', 'auth']);
-        
-    }
     /**
      * Display a listing of the resource.
      *

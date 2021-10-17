@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
+use App\helpers\Csv\Constants\Table;
 class ResetTablesController extends Controller
 {
 
     private function resetTable($table){
         try{
-            DB::statement('SET FOREIGN_KEY_CHECKS=0');
-            DB::table($table)->truncate();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+           Table::clean($table);
         }catch(\Exception $e){
             return back()
             ->with("toast_error", "<small>No se puede resetear la tabla: <b>{$table}</b>, contiene dependecias.</small>");
@@ -21,18 +19,17 @@ class ResetTablesController extends Controller
     }
   
     public function resetTintura(){
-        return $this->resetTable("tintura");
+        return $this->resetTable(Table::TINTURA);
     }
     public function resetToallera(){
-        return $this->resetTable("toallera");
+        return $this->resetTable(Table::TOALLERA);
 
     }
     public function resetDepartament(){
-        return $this->resetTable("departament");
+        return $this->resetTable(Table::DEPARTAMENT);
     }
     public function resetDenomination(){
-        return $this->resetTable("denomination");
-
+        return $this->resetTable(Table::DENOMINATION);
     }
     public function resetAll(){
         $this->resetTintura();

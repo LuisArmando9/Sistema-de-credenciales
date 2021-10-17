@@ -26,7 +26,7 @@
                         Seleccionar Archivo
                         <input id="test" type="file"  name='cvs_file' style="display: none"  accept=".csv"/>
                     </label>
-                    
+
                 </div>
                 <pre id="info" class="text-primary">
                     @error('cvs_file')
@@ -38,13 +38,13 @@
             </div>
             <button style="display:none;" type="submit" id="btn-import" class="btn waves-effect waves-light btn-primary"><i class="icofont icofont-upload"></i>Importar</button>
         </form>
-    </div>                                            
+    </div>
 </div>
 @endsection
 @section('cardContent')
 <div class="table-responsive">
    <div class="row container">
-        <div class="col-2"> 
+        <div class="col-2">
             <div class="mb-3">
             <a class="btn waves-effect waves-light btn-primary btn-outline-primary " href="{{ route('departament.create') }}"><i class="ti-plus"></i>Agregar</a>
             </div>
@@ -61,7 +61,7 @@
         <tr>
             <th>#</th>
             <th>Nombre</th>
-            <th>Acción</th>   
+            <th>Acción</th>
         </tr>
     </thead>
         <tbody>
@@ -76,10 +76,10 @@
                             @method("DELETE")
                             <button type="submit" class="btn waves-effect waves-light btn-success"><i class="icofont icofont-trash"></i></button>
                     </form>
-                    
+
                     </td>
-                </tr>  
-            @endforeach 
+                </tr>
+            @endforeach
         </tbody>
     </table>
 </div>
@@ -92,4 +92,3 @@
 <script type="text/javascript" src="{{ asset('js/custom/alert.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/custom/upload.js') }}"></script>
 @endsection
-

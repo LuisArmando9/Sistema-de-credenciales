@@ -14,11 +14,6 @@ class DenominationController extends Controller
     const RULES = [
         "denominationName" => 'required|string|min:2|max:255'
     ];
-    public function __construct()
-    {
-        $this->middleware(['role:ADMIN', 'auth']);
-        
-    }
     /**
      * Display a listing of the resource.
      *

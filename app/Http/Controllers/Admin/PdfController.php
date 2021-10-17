@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\helpers\Csv\Constants\Constants;
-use PDF;
+use App\Http\Controllers\Admin\Rules\PdfRules;
 use Illuminate\Http\Request;
 use App\helpers\Csv\Constants\Table;
 use App\Http\Controllers\Controller;
@@ -14,17 +14,8 @@ use App\helpers\Pdf\HPDF;
 
 class PdfController extends Controller
 {
-    const RULES = [
-        "minRange" =>["required", "numeric", "lte:maxRange", "not_in:0", "gt:0"],
-        "maxRange" =>[ "required", "numeric", "gte:minRange", "not_in:0", "gt:0"],
-        "denomination" =>["required","string","regex:/TOALLERA|TINTURA/"]
-    ];
-    const CREDENTIAL_INCREMENT = 70;
-    public function __construct()
-    {
-        $this->middleware(['role:ADMIN', 'auth']);
-        
-    }
+   
+     
     /**
      * Display a listing of the resource.
      *
@@ -49,14 +40,15 @@ class PdfController extends Controller
     private function areEqualRanges($data){
         return $data["minRange"] == $data["maxRange"];
     }
-    private function getPdfName($data)
+    private function getPdfName($workers, $denomination)
     {
         $date = date('Y-h-m');
-        $denomination = $data["denomination"];
-        if($this->areEqualRanges($data)){
-            return "credencial-{$data['minRange']}-{$date}-{$denomination}.pdf";
+        $minRange = $workers->first()->id;
+        if($workers->count() == Constants::MIN_RESULT){
+            return "credencial-{$minRange}-{$date}-$denomination .pdf";
         }
-        return  "credenciales-{$data['minRange']}-{$data['maxRange']}-{$date}-{$denomination}.pdf";
+        $maxRange =  $workers->last()->id;
+        return  "credenciales-{$minRange}-{$maxRange}-{$date}-{$denomination}.pdf";
     }
     private function getWorkerData(Request $request){
         $response = $request->all();
@@ -74,20 +66,24 @@ class PdfController extends Controller
         ->get();
     }
    
-    private function insertPdfData($data){
-        $minRange = (int) $data["minRange"];
-        $maxRange = (int) $data["maxRange"];
-        if($minRange == $maxRange){
-            $credentialsNumber = 1;
-        }
-        $credentialsNumber =  $maxRange -  $minRange ;
+    private function insertPdfData($workers, $pdfName, $denomination){
 
+        if($workers->count() == Constants::MIN_RESULT)
+        {
+            $credentialsNumber = Constants::MIN_RESULT;
+            $minRange = $workers->first()->id;
+            $maxRange =  $minRange;
+        }else{
+            $minRange = $workers->first()->id;
+            $maxRange = $workers->last()->id;
+            $credentialsNumber =  ($maxRange -  $minRange)+1;
+        }
         CCPdf::create([
-            "pdfName" => $this->getPdfName($data),
+            "pdfName" => $pdfName,
             "minRange" =>  $minRange,
             "maxRange" =>  $maxRange,
             "credentialsNumber" =>  $credentialsNumber,
-            "denomination" => $data["denomination"]
+            "denomination" => $denomination
         ]);
 
     }
@@ -100,17 +96,16 @@ class PdfController extends Controller
     public function store(Request $request)
     {
         $response = $request->all();
-        $validaton = Validator::make($response, self::RULES);  
+        $validaton = Validator::make($response, PdfRules::RULES);  
         if($validaton->fails()){
             $validaton->errors()->add('error_input', 'error text');
             return redirect()->back()->withInput()->withErrors($validaton);
         }
-        $denomination = $response["denomination"];
+        $denomination = strtolower($response["denomination"]);
         if(Table::isEmpty($denomination)){
             return redirect()->back()
             ->with("toast_error", "La tabla {$denomination} se encuentra vacia.");
         }
-        $pdfName = $this->getPdfName($response);
         $workers = $this->getWorkerData($request);
         if($workers->count() > HPDF::MAX_CREDENTIALS){
             return redirect()->back()->with("toast_error", 
@@ -122,7 +117,8 @@ class PdfController extends Controller
         }
         $pdf = new HPDF($workers, $denomination);
         $pdf->writePdfCredential();
-        $this->insertPdfData($response);
+        $pdfName = $this->getPdfName($workers, $denomination);
+        $this->insertPdfData( $workers, $pdfName, $denomination);
         return $pdf->getOutput($pdfName);
 
     }

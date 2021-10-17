@@ -26,7 +26,7 @@
                         Seleccionar Archivo
                         <input id="test" type="file"  name='cvs_file' style="display: none"  accept=".csv"/>
                     </label>
-                    
+
                 </div>
                 <pre id="info" class="text-primary">
                     @error('cvs_file')
@@ -38,14 +38,14 @@
             </div>
             <button style="display:none;" type="submit" id="btn-import" class="btn waves-effect waves-light btn-primary"><i class="icofont icofont-upload"></i>Importar</button>
         </form>
-    </div>                                             
+    </div>
 </div>
 @endsection
 @section('cardContent')
 <div class="table-responsive">
-    
+
    <div class="container row">
-        <div class="col-3"> 
+        <div class="col-3">
             <div class="mb-3">
                 <a class="btn waves-effect waves-light btn-primary btn-outline-primary " href="{{ route('tintura.create') }}"><i class="ti-plus"></i>Agregar</a>
             </div>
@@ -83,7 +83,7 @@
             </div>
         </div>
    </div>
-   
+
    @if($workers->count() <= 0 )
         @if(!$containsPaginate)
             <p >{{('No se encontró resultado.')}}</p>
@@ -122,8 +122,8 @@
                 @endforeach
                 </tbody>
             </table>
-    @endif   
-  
+    @endif
+
 </div>
 {{-- Pagination --}}
 @if($containsPaginate)

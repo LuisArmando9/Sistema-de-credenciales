@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\helpers\Csv\Constants\Constants;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,4 +18,9 @@ class CCPdf extends Model
         "pdfName",
         "denomination"
     ];
+    public static function getTotal()
+    {
+       
+        return CCPdf::sum("credentialsNumber");
+    }
 }

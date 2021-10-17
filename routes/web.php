@@ -1,7 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CredentialController;
+use App\Http\Controllers\Admin\DenominationController;
+use App\Http\Controllers\Admin\DepartamentController;
+use App\Http\Controllers\Admin\PdfController;
 use App\Http\Controllers\Admin\ResetTablesController;
+use App\Http\Controllers\Admin\TinturasController;
+use App\Http\Controllers\Admin\ToalleraController;
+use App\Http\Controllers\Admin\UserController;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,31 +19,32 @@ use App\Http\Controllers\Admin\ResetTablesController;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return view('auth.login');
 });
 Route::middleware(['role:ADMIN', 'auth'])->group(function () {
-    Route::post("/resetall",[ResetTablesController::class, "resetAll"]);
+    Route::post("/resetall", [ResetTablesController::class, "resetAll"]);
     Route::post("/resettintura", [ResetTablesController::class, "resetTintura"]);
     Route::post("/resettoallera", [ResetTablesController::class, "resetToallera"]);
     Route::post("/resetdepartament", [ResetTablesController::class, "resetDepartament"]);
     Route::post("/resetdenomination", [ResetTablesController::class, "resetDenomination"]);
-   
+    Route::resource('/credential', CredentialController::class);
+    /**upload methods */
+    Route::post("/tintura/upload", [TinturasController::class, "upload"]);
+    Route::post("/toallera/upload", [ToalleraController::class, "upload"]);
+    Route::post("/denomination/upload", [DenominationController::class, "upload"]);
+    Route::post("/departament/upload", [DepartamentController::class, "upload"]);
+    /**end */
+    Route::resource('/toallera', ToalleraController::class);
+    Route::resource('/tintura', TinturasController::class);
+    Route::resource('/departament', DepartamentController::class);
+    Route::resource('/denomination', DenominationController::class);
+    Route::resource('/useradmin', UserController::class);
+    Route::resource('/user', UserController::class);
+    Route::resource('/Pdf', PdfController::class);
+
 });
 
 Auth::routes();
-/**upload methods */
-Route::post("/tintura/upload", [App\Http\Controllers\Admin\TinturasController::class, "upload"]);
-Route::post("/toallera/upload", [App\Http\Controllers\Admin\ToalleraController::class, "upload"]);
-Route::post("/denomination/upload", [App\Http\Controllers\Admin\DenominationController::class, "upload"]);
-Route::post("/departament/upload", [App\Http\Controllers\Admin\DepartamentController::class, "upload"]);
-/**end */
-Route::resource('/toallera',App\Http\Controllers\Admin\ToalleraController::class);
-Route::resource('/tintura',App\Http\Controllers\Admin\TinturasController::class);
-Route::resource('/departament',App\Http\Controllers\Admin\DepartamentController::class);
-Route::resource('/denomination',App\Http\Controllers\Admin\DenominationController::class);
-Route::resource('/useradmin',App\Http\Controllers\Admin\UserController::class);
-Route::resource('/user',App\Http\Controllers\User\UserController::class);
-Route::resource('/Pdf',App\Http\Controllers\Admin\PdfController::class);

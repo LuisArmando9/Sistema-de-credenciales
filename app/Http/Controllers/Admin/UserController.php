@@ -19,11 +19,6 @@ class UserController extends Controller
         'typeUser' => ['required', "string", 'min:4', "max:5", 'regex:/ADMIN|USER/']
     ];
     const INPUT_NAMES = ["name", "email"];
-    public function __construct()
-    {
-        $this->middleware(['role:ADMIN', 'auth']);
-        
-    }
     /**
      * Display a listing of the resource.
      *
