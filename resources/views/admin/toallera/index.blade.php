@@ -57,7 +57,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <input type="text" name="search" class="form-control"    placeholder="Folio" required>
+                                            <input type="text" name="search" class="form-control"    placeholder="Folio o Nombre" required>
                                             @error('search')
                                                 <span class="text-danger" role="alert">
                                                     <p>{{ $message }}</p>

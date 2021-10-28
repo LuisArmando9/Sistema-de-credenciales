@@ -20,56 +20,24 @@
                             
                         </div>
                     </div>
-                    <div class="row m-t-25 text-left">
-                        <div class="container">
-                            <p>Tipo de impresión de los credencialas: <b>uno o personalizado(Ej. 513 - 530).</b></p>
-                        </div>
-                        <div class="col-md-12">
-                      
-                            <select name="typePage" id="typePage" class="form-control" required>
-                                
-                                <option  value="ONE" selected>Uno</option>
-                                <option   value="CUSTOM">Personalizados</option>
-                            </select>
-                        </div>
-                        @error("typePage")
-                            <p class="text-danger">
-                                {{ $message }}
-                            </p>
-                        @enderror
-                    </div>
+                 
                     <br><br>
                     <div class="row">
                     <div class="container">
-                        <p>
-                            Los rangos para imprimir las credenciales, mediante los folios: <b>Minimo: 10 y Máximo: 50</b>.   
-                        </p>
+                        
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <div class="form-group form-primary">
-                                <input  type="number" class="form-control" name="minRange" value="{{old('minRange')}}" required>
+                                <input  type="text" class="form-control" name="name" value="{{old('name')}}" required>
                                 <span class="form-bar"></span>
-                                <label class="float-label minRangeText">Número de folio</label>
+                                <label class="float-label minRangeText">Nombre Completo</label>
                             </div>
-                            @error("minRange")
+                            @error("name")
                                 <p  class="text-danger">
                                    {{ $message }}
                                 </p>
                             @enderror
                          
-                        </div>
-                        <div class="col-sm-6" id="maxRange" style="display: none;">
-                            <div class="form-group form-primary">
-                                <input  type="number" class="form-control" name="maxRange" value="{{old('maxRange')}}" required>
-                                <span class="form-bar"></span>
-                                <label class="float-label">Máximo</label>
-                            </div>
-                            @error("maxRange")
-                            <p class="text-danger">
-                                {{ $message }}
-                            </p>
-                            @enderror
-                            
                         </div>
                     </div>
                     <div class="row m-t-25 text-left">

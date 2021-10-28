@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\Rules\CsvRules;
 use App\helpers\Csv\CSVWorker;
 use App\helpers\Csv\Constants\Table;
+use App\helpers\Name;
 use App\Http\Controllers\Admin\Rules\WorkerRules;
 use Exception;
-
 class ToalleraController extends Controller
 {
 
@@ -27,9 +27,15 @@ class ToalleraController extends Controller
             ->with("workers", Toallera::paginate())
             ->with("containsPaginate", true);
         }
-        $request->validate(WorkerRules::SEARCH);
+        if(is_numeric($response)){   
+            $workers = Toallera::where("id", $response)->get();//$query->where($column, 'like', '%'.$value.'%');
+        }elseif(Name::isValid($response)){
+            $workers = Toallera::where("worker",'like', '%'.$response.'%' )->get();
+        }else{
+            return back();
+        }
         return view("admin.toallera.index")
-        ->with("workers", Toallera::where("id", $response)->get())
+        ->with("workers",$workers)
         ->with("containsPaginate", false);
 
 

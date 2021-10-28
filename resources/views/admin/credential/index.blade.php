@@ -8,7 +8,7 @@
 
     <div class="container row">
         @if($credentialIsFinded)
-            <h5 class="text-center">SE HAN IMPRESO {{$credentials->count()}} CREDENCIALES</h5>
+            <h5 class="text-center">NÚMERO DE CREDENCIALES IMPRESAS SON:  {{$credentials->count()}} </h5>
             <br>
             <br>
             <table class="table">

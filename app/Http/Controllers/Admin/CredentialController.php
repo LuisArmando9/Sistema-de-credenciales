@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\helpers\Csv\Constants\Constants;
 use App\helpers\Csv\Constants\Table;
+use App\helpers\Name;
 use App\Http\Controllers\Admin\Rules\CredentialRules;
 use App\Http\Controllers\Controller;
 use App\Models\CCPdf;
@@ -19,32 +20,41 @@ class CredentialController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private function getCredential($text, $denomination){
+        if(empty($text)){
+            return null;
+        }
+        if(is_numeric($text)){
+            return DB::table($denomination)->where("id", $text)->get()->first();
+        }elseif(Name::isValid($text)){
+            return DB::table($denomination)->where("worker",'like', '%'.$text.'%' )->get()->first();
+        }else {
+            return  null;
+        }
+
+    }
     public function index(Request $request)
     {
-        if(Constants::isEmpty($request->all()))
-        {
+        if(Constants::isEmpty($request->all())){
             return back();
         }
         $response = $request->except(["_token"]);
         $validaton = Validator::make($response, CredentialRules::RULES);
-        if($validaton->fails())
-        {
+        if($validaton->fails()){
             $validaton->errors()->add('credentialInfo', 'errors');
             return redirect()->back()->withInput()->withErrors($validaton);
         }
-        $id = $request->get("id");
+        $text = $request->get("credential-search");
         $denomination = strtolower($request->get("denomination"));
-        $worker = DB::table($denomination)->find($id);
-        if(is_null($worker))
-        {
-            return back();
+        $worker = $this->getCredential($text, $denomination);
+
+        if(is_null($worker)){
+            return back()->with("toast_error", "Ocurrio un error al buscar, verifiqué sus campos");
         }
-        $sql = "{$id} >= minRange and {$id} <= maxRange";
-        $credentials = CCPdf::whereRaw($sql)->get(["pdfName", "created_at"]);
+        $credentials = CCPdf::where("folio", $worker->id)->where("denomination", $denomination)->get(["pdfName", "created_at"]);
         $view = view("admin.credential.index")
             ->with("worker", $worker->worker);
-        if($credentials->count() == Constants::EMPTY)
-        {
+        if($credentials->count() == Constants::EMPTY){
             return $view
             ->with("credentialIsFinded", false);
         }

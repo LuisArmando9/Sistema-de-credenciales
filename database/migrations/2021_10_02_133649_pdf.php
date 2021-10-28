@@ -15,9 +15,7 @@ class Pdf extends Migration
     {
         Schema::create('pdf', function (Blueprint $table) {
             $table->id();
-            $table->unsignedMediumInteger("minRange");
-            $table->unsignedMediumInteger("maxRange");
-            $table->unsignedMediumInteger("credentialsNumber");
+            $table->unsignedMediumInteger("folio");
             $table->string("pdfName");
             $table->string("denomination");
             $table->timestamps();

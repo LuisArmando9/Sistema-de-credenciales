@@ -44,12 +44,12 @@
                                 </div>
                                 <div class="col-sm-7">
                                     <div class="form-group form-primary">
-                                        <input type="number" class="form-control" name="id" value="{{old('id')}}"
-                                            required>
+                                        <input type="text" class="form-control" name="credential-search" value="{{old('search')}}"
+                                            required >
                                         <span class="form-bar"></span>
-                                        <label class="float-label minRangeText">Número de folio</label>
+                                        <label class="float-label">Nombre completo o folio</label>
                                     </div>
-                                    @error("id")
+                                    @error("credential-search")
                                     <p class="text-danger">
                                         {{ $message }}
                                     </p>
@@ -64,13 +64,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @if(session("credentialInfo"))
-                                @if(session("credentialInfo")->count() <= 0)
-                                    <label class="text-danger">No se encontro ningun resultado</label>
-                                @else
-                                <label class="text-danger">Si chinga tu madre</label>
-                                @endif
-                            @endif
+                          
 
 
                         </div>

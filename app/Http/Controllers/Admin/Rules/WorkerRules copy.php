@@ -19,7 +19,7 @@ class WorkerRules{
         "search" =>
         [
             "required",
-            "numeric",
+            
         ]
     ];
     public static function getRulesWithId($tablename){

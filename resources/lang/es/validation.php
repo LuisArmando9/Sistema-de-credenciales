@@ -168,7 +168,8 @@ return [
         "search" => "busqueda", 
         "maxRange" => "rango máximo",
         "accept" => "aceptar",
-        "minRange" => "rango minimo"
+        "minRange" => "rango minimo",
+        "name" => "nombre"
     ],
 
 ];

@@ -12,15 +12,9 @@ class CCPdf extends Model
     protected $table = 'pdf';
     public $timestamps = true;
     protected $fillable = [
-        'minRange',
-        'maxRange',
-        'credentialsNumber',
+        'folio',
         "pdfName",
         "denomination"
     ];
-    public static function getTotal()
-    {
-       
-        return CCPdf::sum("credentialsNumber");
-    }
+   
 }
