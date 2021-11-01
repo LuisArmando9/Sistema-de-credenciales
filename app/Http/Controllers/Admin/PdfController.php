@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\CCPdf;
 use App\helpers\Pdf\HPDF;
 use Exception;
+use Faker\Core\Number;
 
 class PdfController extends Controller
 {
@@ -42,10 +43,9 @@ class PdfController extends Controller
     private function areEqualRanges($data){
         return $data["minRange"] == $data["maxRange"];
     }
-    private function getPdfName($id, $denomination)
+    private function getPdfName($id)
     {
-        $date = date('Y-h-m');
-        return  "credencial-{$id}-{$date}-{$denomination}.pdf";
+        return  "{$id}.pdf";
     }
     private function getPdf($worker, $denomination){
         $pdf = new HPDF($worker, $denomination);
@@ -60,10 +60,14 @@ class PdfController extends Controller
             throw new Exception("La tabla {$denomination} se encuentra vacia.");
         }
         $name = $response["name"];
-        if(!Name::isValid( $name)){
-            throw new Exception("El nombre {$name} es incorrecto, debe ser completo.");
+        if(Name::isValid( $name)){
+            $worker = DB::table($denomination)->where("worker",'like', '%'. $name.'%' )->get()->first();
+            
+        }elseif(is_numeric($name)){
+            $worker = DB::table($denomination)->where("id", $name)->get()->first();
+        }else{
+            throw new Exception("El elemento {$name} es incorrecto, deber ser id o nombre completo");
         }
-        $worker = DB::table($denomination)->where("worker",'like', '%'. $name.'%' )->get()->first();
         if(is_null($worker)){
             throw new Exception("El nombre {$name} no se encuentra.");
         }

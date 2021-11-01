@@ -1,7 +1,7 @@
 @extends('dashboard')
 @section('title', 'Consulta')
 @section('viewName', "Tintura")
-@section('viewMessage', 'Bienvenidos a la consulta  de empleados de tintura')
+@section('viewMessage', 'Bienvenidos a la consulta de empleados de tintura')
 @section("importForm")
 <div class="card">
     <div class="card-header">
@@ -22,9 +22,9 @@
             <div id="main">
                 <div class="upload-file">
                     <label class="btn waves-effect waves-light btn-primary  btn-outline-primary">
-                    <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                         Seleccionar Archivo
-                        <input id="test" type="file"  name='cvs_file' style="display: none"  accept=".csv"/>
+                        <input id="test" type="file" name='cvs_file' style="display: none" accept=".csv" />
                     </label>
 
                 </div>
@@ -36,7 +36,8 @@
                     @enderror
                 </pre>
             </div>
-            <button style="display:none;" type="submit" id="btn-import" class="btn waves-effect waves-light btn-primary"><i class="icofont icofont-upload"></i>Importar</button>
+            <button style="display:none;" type="submit" id="btn-import"
+                class="btn waves-effect waves-light btn-primary"><i class="icofont icofont-upload"></i>Importar</button>
         </form>
     </div>
 </div>
@@ -44,92 +45,108 @@
 @section('cardContent')
 <div class="table-responsive">
 
-   <div class="container row">
+    <div class="container row">
         <div class="col-3">
             <div class="mb-3">
-                <a class="btn waves-effect waves-light btn-primary btn-outline-primary " href="{{ route('tintura.create') }}"><i class="ti-plus"></i>Agregar</a>
+                <a class="btn waves-effect waves-light btn-primary btn-outline-primary "
+                    href="{{ route('tintura.create') }}"><i class="ti-plus"></i>Agregar</a>
             </div>
         </div>
         <div class="col-9">
-           <div class="row container">
+            <div class="row container">
                 <div class="col-10">
-                        <form  method="GET" action="{{route('tintura.index')}}">
-                                @csrf
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <input type="text" name="search" class="form-control"    placeholder="Folio o nombre" required>
-                                            @error('search')
-                                                <span class="text-danger" role="alert">
-                                                    <p>{{ $message }}</p>
-                                                </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button class="btn btn-primary" type="submit">
-                                        <i class="fa fa-search" aria-hidden="true"></i>
-                                        </button>
-                                    </div>
+                    <form method="GET" action="{{route('tintura.index')}}">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="text" name="search" class="form-control" placeholder="Folio o nombre"
+                                        required>
+                                    @error('search')
+                                    <span class="text-danger" role="alert">
+                                        <p>{{ $message }}</p>
+                                    </span>
+                                    @enderror
                                 </div>
-                        </form>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="col-2">
-                    <form method="POST" action="/resettintura" >
+                    <form method="POST" action="/resettintura">
                         @csrf
-                        <button type="submit" class="btn waves-effect waves-light btn-primary btn-outline-primary ">RESETEAR</button>
+                        <button type="submit"
+                            class="btn waves-effect waves-light btn-primary btn-outline-primary ">RESETEAR</button>
                     </form>
                 </div>
             </div>
         </div>
-   </div>
+    </div>
 
-   @if($workers->count() <= 0 )
-        @if(!$containsPaginate)
-            <p >{{('No se encontró resultado.')}}</p>
+    @if($workers->count() <= 0 ) @if(!$containsPaginate) <p>{{('No se encontró resultado.')}}</p>
         @endif
-    @else
-            <table class="table">
-                <thead>
-                    <tr>
+        @else
+        <table class="table">
+            <thead>
+                <tr>
                     <th>#</th>
                     <th>Tabajador</th>
                     <th>Estatus</th>
                     <th>NSS</th>
+                    <th>Credendial</th>
                     <th>Acción</th>
                 </tr>
-                </thead>
-                <tbody>
+            </thead>
+            <tbody>
                 @foreach($workers as $worker)
-                    <tr>
-                        <th scope="row">{{$worker->id}}</th>
-                        <td>{{$worker->worker}}</td>
-                        @if($worker->active)
-                            <td><span  class="bg-info text-white p-2">{{('Activo')}}</span></td>
-                        @else
-                            <td ><span  class="bg-danger text-white p-2">{{('No activo')}}</span></td>
-                        @endif
-                        <td>{{$worker->nss}}</td>
-                        <td>
-                            <form  class="form-material form-delete"  action="{{ route('tintura.destroy', $worker->id)}}", method="POST">
-                                <a class="btn waves-effect waves-light btn-danger" href="{{ route('tintura.edit', $worker->id)}}"><i class="icofont icofont-pencil-alt-1"></i></a>
-                                @csrf
-                                @method("DELETE")
-                                <button type="submit" class="btn waves-effect waves-light btn-success"><i class="icofont icofont-trash"></i></button>
-                            </form>
-                        </td>
-                    </tr>
+                <tr>
+                    <th scope="row">{{$worker->id}}</th>
+                    <td>{{$worker->worker}}</td>
+                    @if($worker->active)
+                    <td><span class="bg-info text-white p-2">{{('Activo')}}</span></td>
+                    @else
+                    <td><span class="bg-danger text-white p-2">{{('No activo')}}</span></td>
+                    @endif
+                    <td>{{$worker->nss}}</td>
+                    <td>
+                        <form class="form-material" action="{{ route('Pdf.store')}}" ,
+                            method="POST">
+                            @csrf
+                            <input type="hidden" name="denomination" value="TINTURA" />
+                            <input type="hidden" name="name" value="{{$worker->id}}" />
+                          
+                            <button type="submit" class="btn waves-effect waves-light btn-success"><i class="fa fa-credit-card-alt" aria-hidden="true"></i></button>
+                        </form>
+                    </td>
+                    <td>
+                        <form class="form-material form-delete" action="{{ route('tintura.destroy', $worker->id)}}" ,
+                            method="POST">
+                            <a class="btn waves-effect waves-light btn-danger"
+                                href="{{ route('tintura.edit', $worker->id)}}"><i
+                                    class="icofont icofont-pencil-alt-1"></i></a>
+                            @csrf
+                            @method("DELETE")
+                            <button type="submit" class="btn waves-effect waves-light btn-success"><i
+                                    class="icofont icofont-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
                 @endforeach
-                </tbody>
-            </table>
-    @endif
+            </tbody>
+        </table>
+        @endif
 
 </div>
 {{-- Pagination --}}
 @if($containsPaginate)
-    <div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center">
     {!! $workers->links() !!}
-    </div>
+</div>
 @endif
 @endsection
 
