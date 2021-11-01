@@ -1,7 +1,7 @@
 @extends('dashboard')
 @section('title', 'Actualización')
-@section('viewName', "Toallera")
-@section('viewMessage', 'Bienvenido, actualización  del empleado de la toallera')
+@section('viewName', "Tintura")
+@section('viewMessage', 'Bienvenido, actualización  del empleado de la tintura')
 @section('cardContent')
 <div  class="container">
     <form class="form-material" method="POST" action="{{ route('tintura.update', $worker->id) }}">

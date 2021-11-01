@@ -33,11 +33,7 @@ class HPDF{
         }
         $this->pdf =new Fpdf('l', 'mm', array(self::CREDENTIAL_HEIGHT,self::CREDENTIAL_WIDTH));
         $this->img = public_path().self::FILE_NAME;
-        if(Table::TINTURA == $denomination){
-            $this->denomination = "TINTURA S.A. DE C.V.";
-        }else{
-            $this->denomination = "TOALLERA POPULAR S.A. DE C.V.";
-        }
+        $this->denomination = Table::getFullDenominatioName($denomination);
         $this->loadDepartaments();
         
     }
