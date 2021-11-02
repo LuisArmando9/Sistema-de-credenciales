@@ -92,7 +92,7 @@
           <td>
             <a
               class="btn waves-effect waves-light btn-danger"
-              :href="'tintura/' + worker.id + '/edit'"
+              :href="tempDenomination+'/' + worker.id + '/edit'"
               ><i class="icofont icofont-pencil-alt-1"></i
             ></a>
             <button

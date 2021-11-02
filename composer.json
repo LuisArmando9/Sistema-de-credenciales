@@ -19,6 +19,9 @@
         "laravel/ui": "^3.3",
         "myclabs/php-enum": "^1.8",
         "realrashid/sweet-alert": "^4.0",
+        "setasign/fpdf": "1.8",
+        "setasign/fpdi": "^2.3",
+        "setasign/tfpdf": "1.31.*",
         "spatie/laravel-permission": "^5.1"
     },
     "require-dev": {

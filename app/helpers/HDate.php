@@ -13,8 +13,8 @@ class HDate{
     {
         $dateTime = date_create_from_format("Y-m-d", $date);
         $month = (int)$dateTime->format("n") -1;
-        $monthName = HDate::MONTHS[$month];
-        return "{$dateTime->format('d')} de {$monthName} {$dateTime->format('Y')}";
+        $monthName = strtoupper(HDate::MONTHS[$month]);
+        return "{$dateTime->format('d')} DE {$monthName} {$dateTime->format('Y')}";
 
     }
 }
