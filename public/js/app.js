@@ -42200,7 +42200,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("NSS")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Credendial")]),
+        _c("th", [_vm._v("Credencial")]),
         _vm._v(" "),
         _c("th", [_vm._v("Acción")])
       ])

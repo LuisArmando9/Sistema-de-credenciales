@@ -79,11 +79,27 @@ class HPDF
             $this->pdf->write(0, $splitName['NAME']);
         }
     }
+    private function isRangeValid($min, $max){
+        return $this->worker->id >=$min && $this->worker->id <= $max;
+    }
+    private function getFolioPosition(){
+        $basePosition = 169; //this position is valid only to numbers >= 1000 or <= 9999
+        if( $this->isRangeValid(0, 9)){
+            return $basePosition+3;
+        }elseif($this->isRangeValid(10, 99)){
+            return $basePosition+2;
+        }elseif($this->isRangeValid(100, 999)){
+            return $basePosition+2;
+        }else{
+            return $basePosition;
+        }
+
+    }
     private function writeFolio(){
         $this->pdf->SetFont('Arial', 'BI', self::FONT_SIZE);
         $this->pdf->SetXY(77, 24);
         $this->pdf->write(0, $this->worker->id);
-        $this->pdf->SetXY(169, 30);
+        $this->pdf->SetXY($this->getFolioPosition(), 30);
         $this->pdf->write(0, $this->worker->id);
 
     }

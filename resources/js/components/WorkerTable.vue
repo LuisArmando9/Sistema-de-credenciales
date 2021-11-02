@@ -59,7 +59,7 @@
           <th>Tabajador</th>
           <th>Estatus</th>
           <th>NSS</th>
-          <th>Credendial</th>
+          <th>Credencial</th>
           <th>Acción</th>
         </tr>
       </thead>
