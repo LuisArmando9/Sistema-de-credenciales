@@ -19,24 +19,9 @@ class ToalleraController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $response = $request->get("search");
-        if(is_null($response)){
-            return view("admin.toallera.index")
-            ->with("workers", Toallera::paginate())
-            ->with("containsPaginate", true);
-        }
-        if(is_numeric($response)){   
-            $workers = Toallera::where("id", $response)->get();//$query->where($column, 'like', '%'.$value.'%');
-        }elseif(Name::isValid($response)){
-            $workers = Toallera::where("worker",'like', '%'.$response.'%' )->get();
-        }else{
-            return back();
-        }
-        return view("admin.toallera.index")
-        ->with("workers",$workers)
-        ->with("containsPaginate", false);
+        return view("admin.toallera.index");
 
 
         

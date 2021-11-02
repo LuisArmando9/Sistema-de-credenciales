@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ResetTablesController;
 use App\Http\Controllers\Admin\TinturasController;
 use App\Http\Controllers\Admin\ToalleraController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\WorkerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,6 +45,10 @@ Route::middleware(['role:ADMIN', 'auth'])->group(function () {
     Route::resource('/useradmin', UserController::class);
     Route::resource('/user', UserController::class);
     Route::resource('/Pdf', PdfController::class);
+    Route::resource('/Worker', WorkerController::class);
+    /************/
+
+    
 
 });
 

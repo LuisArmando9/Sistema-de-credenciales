@@ -10,10 +10,7 @@
     <title>@yield('title')</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ secure_asset('js/app,js')}}')" defer></script>
-
-    <script src="{{ asset('js/app.js') }}"></script>
+ 
 
     <link rel="icon" href="{{ asset('images/favicon.ico')}}" type="image/x-icon">
     <!-- Google font-->

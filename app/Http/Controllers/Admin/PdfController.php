@@ -51,6 +51,7 @@ class PdfController extends Controller
         $pdf = new HPDF($worker, $denomination);
         $pdf->writePdfCredential();
         $pdfName = $this->getPdfName($worker->id, $denomination);
+        header('Content-type: application/pdf');
         return $pdf->getOutput($pdfName);
 
     }

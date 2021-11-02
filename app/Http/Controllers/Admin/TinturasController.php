@@ -10,6 +10,7 @@ use App\helpers\Csv\CSVWorker;
 use App\helpers\Csv\Constants\Table;
 use App\helpers\Name;
 use App\Http\Controllers\Admin\Rules\WorkerRules;
+use Tintura;
 
 /**
  * https://stackoverflow.com/questions/32810385/laravel-preg-match-no-ending-delimiter-found
@@ -23,27 +24,8 @@ class TinturasController extends Controller
      * @return \Illuminate\Http\Response
      */
    
-    public function index(Request $request)
-    {
-        $response = $request->get("search");
-        if(is_null($response)){
-            return view("admin.tintura.index")
-            ->with("workers", Tinturas::paginate())
-            ->with("containsPaginate", true);
-        }
-        //$request->validate(WorkerRules::SEARCH);
-
-        if(is_numeric($response)){   
-            $workers = Tinturas::where("id", $response)->get();//$query->where($column, 'like', '%'.$value.'%');
-        }elseif(Name::isValid($response)){
-            $workers = Tinturas::where("worker",'like', '%'.$response.'%' )->get();
-        }else{
-            return back();
-        }
-        return view("admin.tintura.index")
-        ->with("workers", $workers)
-        ->with("containsPaginate", false);
-        
+    public function index(){
+        return view("admin.tintura.index");
     }
 
     /**

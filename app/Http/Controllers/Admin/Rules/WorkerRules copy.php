@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers\Admin\Rules;
 class WorkerRules{
+    const RULES_FOR_PAGINATION =[
+        "denomination" => ["required","string","regex:/TOALLERA|TINTURA/"]
+    ];
     const RULES = [  
         "worker" => "required|alpha_spaces",
         "curp" => [

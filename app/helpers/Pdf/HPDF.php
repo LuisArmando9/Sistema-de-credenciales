@@ -81,7 +81,7 @@ class HPDF{
     }
     public function getOutput($fileName){
         ob_end_clean();
-        return $this->pdf->Output("D", $fileName);
+        return $this->pdf->Output("D", $fileName, false);
     }
 
 
