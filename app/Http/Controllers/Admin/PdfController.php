@@ -27,7 +27,6 @@ class PdfController extends Controller
     public function index()
     {
         
-
     }
 
     /**
