@@ -3,6 +3,7 @@ namespace App\helpers\Pdf;
 use setasign\Fpdi\Tfpdf;
 use App\helpers\Csv\Constants\Table;
 use App\helpers\HDate;
+use App\helpers\Name;
 use App\Models\Departament;
 use Exception;
 
@@ -63,15 +64,20 @@ class HPDF
     }
     private function writeName()
     {
-        $splitName = $this->splitName($this->worker->worker);
-        if (strlen($this->worker->worker) <= self::MAX_CHARACTERS_PER_NAME) {
+        $name = strtoupper($this->worker->worker);
+        if (strlen($name) <= self::MAX_CHARACTERS_PER_NAME) {
             $this->pdf->SetXY(24, 30);
-            $this->pdf->write(0, "{$splitName['LASTNAMES']} {$splitName['NAMES']}");
+            $this->pdf->write(0, $name);
         } else {
+            $start = self::MAX_CHARACTERS_PER_NAME;
+            while(mb_substr($name, $start,1) !== ' '){
+                $start--;
+            } 
+            $offset = strlen($name) - $start;
             $this->pdf->SetXY(24, 30);
-            $this->pdf->write(0, $splitName['LASTNAMES']);
+            $this->pdf->write(0, mb_substr($this->worker->worker, 0, $start));
             $this->pdf->SetXY(24, 35);
-            $this->pdf->write(0, $splitName['NAMES']);
+            $this->pdf->write(0,  mb_substr($this->worker->worker, ++$start, $offset));
         }
     }
     private function isRangeValid($min, $max)
