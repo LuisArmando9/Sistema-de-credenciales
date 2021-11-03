@@ -51,7 +51,7 @@ def createName()-> str:
     lasName = _LAST_NAME[getRandInt(len(_LAST_NAME))]
     middleName = _LAST_NAME[getRandInt(len(_LAST_NAME))]
     name = _NAMES[getRandInt(len(_NAMES))]
-    return f"{name} {middleName} {lasName}"
+    return f"{middleName} {lasName} {name}"
 def getFolio() -> int:
     return  rand.randint(0, 11)
 def createCsvLine(i) -> str:

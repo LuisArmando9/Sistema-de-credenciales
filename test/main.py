@@ -2,9 +2,9 @@ import denominations
 import workers
 import departaments
 import sys
-workerPath = "worker.cvs"
-denominationsPath = "denomination.cvs"
-departamentPath = "departament.cvs"
+workerPath = "worker.csv"
+denominationsPath = "denomination.csv"
+departamentPath = "departament.csv"
 _MAX_ARGVS = 3
 
 def getMaxOfVar(str) -> int:
