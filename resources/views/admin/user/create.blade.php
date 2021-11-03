@@ -29,13 +29,6 @@
                         <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                     @enderror
                 </div>
-                <div class="form-group form-primary">
-                    <select name="typeUser" class="form-control">
-                        <option  disabled selected>Tipo de usuario</option>
-                        <option value="ADMIN">Administrador</option>
-                        <option value="USER">Usuario</option>
-                    </select>
-                </div>
                 <div class="row">
                     <div class="col-sm-6">
                             <div class="form-group form-primary">

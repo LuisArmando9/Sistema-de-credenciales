@@ -66,12 +66,7 @@
                                         </div>
                                     </div>
                                     <hr/>
-                                    <div class="row">
-                                        <div class="col-md-10">
-                                           <ins><h2> <a href="{{ route('register') }}">REGISTRO</a></h2></ins>
-                                        </div>
-                                        
-                                    </div>
+                                    
                                     
                                 </div>
                             </div>
