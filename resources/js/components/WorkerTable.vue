@@ -203,6 +203,7 @@ export default {
       if (this.containsAnyResult) {
         this.getWorkers(this.lastUrl);
         this.containsAnyResult = false;
+        this.searchResult = "";
       }
     },
     getWorker() {
@@ -211,8 +212,8 @@ export default {
         this.searchResult = "El campo se encuentra vacio";
         return;
       }
-      if (this.search.length <= MIN_CHARS_PER_INPUT_SEARCH) {
-        this.searchResult = "El debe contener más de dos caracteres";
+      if (this.search.length < MIN_CHARS_PER_INPUT_SEARCH) {
+        this.searchResult = "El debe contener minimo un caracter";
         return;
       }
       axios

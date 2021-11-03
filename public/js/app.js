@@ -2305,6 +2305,7 @@ var BASE_URL = "/Worker?page=1";
       if (this.containsAnyResult) {
         this.getWorkers(this.lastUrl);
         this.containsAnyResult = false;
+        this.searchResult = "";
       }
     },
     getWorker: function getWorker() {
@@ -2317,8 +2318,8 @@ var BASE_URL = "/Worker?page=1";
         return;
       }
 
-      if (this.search.length <= MIN_CHARS_PER_INPUT_SEARCH) {
-        this.searchResult = "El debe contener más de dos caracteres";
+      if (this.search.length < MIN_CHARS_PER_INPUT_SEARCH) {
+        this.searchResult = "El debe contener minimo un caracter";
         return;
       }
 
