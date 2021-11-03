@@ -11,10 +11,9 @@ class HDate{
     }
     public static function parse($date)
     {
-        $dateTime = date_create_from_format("Y-m-d", $date);
-        $month = (int)$dateTime->format("n") -1;
-        $monthName = strtoupper(HDate::MONTHS[$month-1]);
-        return "{$dateTime->format('d')} DE {$monthName} {$dateTime->format('Y')}";
+        setlocale(LC_ALL, 'es_ES');
+        $parseDate = strtoupper(date("j DE F, Y", strtotime($date)));
+        return $parseDate;
 
     }
 }
