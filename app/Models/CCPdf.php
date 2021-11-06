@@ -12,9 +12,10 @@ class CCPdf extends Model
     protected $table = 'pdf';
     public $timestamps = true;
     protected $fillable = [
-        'folio',
+        'folios',
         "pdfName",
-        "denomination"
+        "denomination",
+        "credentialsNumber"
     ];
    
 }

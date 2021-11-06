@@ -20,6 +20,45 @@ class CredentialController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private function workerIdIsInRanges($pdfName, $workerid){
+        if(str_contains($pdfName, '-')){
+            $tempRanges = explode('.', $pdfName);
+            $ranges = explode('-', $tempRanges[0]);
+            $minRange = $ranges[0];
+            $maxRange = $ranges[1];
+            return $minRange >= $workerid &&  $workerid <= $maxRange;
+        }
+        $ranges = explode('.', $pdfName);
+        return $ranges[0] == $workerid;
+        
+    }
+    private function matches($denomination, $worker){
+        $pdfs = CCPdf::where("denomination", $denomination)->get(["pdfName", "created_at", "folios"]);
+        //pdf name contains the ranges, then can know if id is included.
+        /**
+         * for example employe id is 10 y the name is 1-12.pdf
+         * then, 10 is less than 12 "can be " in this ranges. 
+         * We do not have map all the folios.
+         */
+        if($pdfs->count() == Constants::EMPTY){
+            return [];
+        }
+        $matches = array();
+        foreach ($pdfs as $pdf) {
+            if($this->workerIdIsInRanges($pdf->pdfName, $worker->id)){
+                $ranges = explode(" ", $pdf->folios);
+                if(in_array($worker->id, $ranges)){
+                    array_push($matches, $pdf);
+                }
+            }
+        }
+        return $matches;
+
+        
+    
+        
+
+    }
     private function getCredential($text, $denomination){
         if(empty($text)){
             return null;
@@ -51,10 +90,10 @@ class CredentialController extends Controller
         if(is_null($worker)){
             return back()->with("toast_error", "Ocurrio un error al buscar, verifiqué sus campos");
         }
-        $credentials = CCPdf::where("folio", $worker->id)->where("denomination", $denomination)->get(["pdfName", "created_at"]);
+        $credentials = $this->matches($denomination, $worker);//CCPdf::where("folio", $worker->id)->where("denomination", $denomination)->get(["pdfName", "created_at", "folios"]);
         $view = view("admin.credential.index")
             ->with("worker", $worker->worker);
-        if($credentials->count() == Constants::EMPTY){
+        if(Constants::isEmpty($credentials)){
             return $view
             ->with("credentialIsFinded", false);
         }

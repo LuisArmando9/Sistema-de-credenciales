@@ -27,6 +27,6 @@ class CredentialInfo extends Component
     public function render()
     {
         return view('components.admin.modal.credential-info')
-        ->with("credentialNumber", CCPdf::get()->count());
+        ->with("credentialNumber", CCPdf::sum("credentialsNumber"));
     }
 }

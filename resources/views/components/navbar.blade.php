@@ -46,7 +46,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#exampleModal" data-toggle="modal" data-target="#exampleModal"
+                    <a href="#print-credentials" data-toggle="modal" data-target="#print-credentials"
                         class="waves-effect waves-light">
                         <i class="fa fa-print" aria-hidden="true"></i>
                     </a>

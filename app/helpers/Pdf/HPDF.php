@@ -1,5 +1,7 @@
 <?php
 namespace App\helpers\Pdf;
+
+use App\helpers\Csv\Constants\Constants;
 use setasign\Fpdi\Tfpdf;
 use App\helpers\Csv\Constants\Table;
 use App\helpers\HDate;
@@ -13,19 +15,23 @@ class HPDF
     const CREDENTIAL_HEIGHT = 84;
     const FONT_SIZE = 10;
     const MAX_CHARACTERS_PER_NAME = 22;
+    const MAX_CREDENTIALS = 50;
     private $pdf;
     private $img;
     private $denomination;
     private $departaments;
     private $worker;
-    public function __construct($worker, $denomination)
+    private $workers;
+    public function __construct($workers, $denomination)
     {
 
-        $this->worker = $worker;
-        if (is_null($this->worker)) {
-            throw new Exception("El trabajador ingresado es incorrecto");
+        $this->workers = $workers;
+        if($workers->count() == Constants::EMPTY){
+            throw new Exception("Los datos ingresados estan vacios");
         }
-
+        if($this->workers->count() > self::MAX_CREDENTIALS){
+            throw new Exception("Solo debe contener 100 credenciales");
+        }
         $this->initPdf();
         $this->denomination = Table::getFullDenominatioName($denomination);
         $this->loadDepartaments();
@@ -35,14 +41,9 @@ class HPDF
     {
 
         $this->pdf = new Tfpdf\Fpdi();
-        $this->pdf->AddPage();
         $this->pdf->SetFont('Arial', 'B', self::FONT_SIZE);
-        $path = public_path() . "/credentials/template.pdf";
-        $this->pdf->setSourceFile($path);
-        $tplId = $this->pdf->importPage(1);
-        $this->pdf->useTemplate($tplId, null, null, null, self::CREDENTIAL_HEIGHT, true);
-        $this->pdf->importPage(1);
-
+        $this->img = public_path() . "/credentials/template.pdf";
+        $this->pdf->setSourceFile($this->img);
     }
     private function splitName($fullName)
     {
@@ -135,9 +136,14 @@ class HPDF
 
     public function writePdfCredential()
     {
-        $this->writeFrontContent();
-        $this->writeBackContent();
-
+        $tplId = $this->pdf->importPage(1);
+        foreach ($this->workers as $worker) {
+            $this->pdf->AddPage();
+            $this->pdf->useTemplate($tplId, null, null, null, self::CREDENTIAL_HEIGHT, true);
+            $this->worker = $worker;
+            $this->writeFrontContent();
+            $this->writeBackContent();
+        }
     }
     public function getOutput($fileName)
     {

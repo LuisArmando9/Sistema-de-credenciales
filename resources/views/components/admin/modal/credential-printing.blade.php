@@ -1,4 +1,4 @@
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="print-credentials" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -8,7 +8,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="md-float-material form-material" id="pdfForm"  method="POST" action="{{ route('Pdf.store') }}">
+      <form class="md-float-material form-material" id="pdfForm"  method="POST" action="{{ route('Pdf.store') }}">
             @csrf
             <div class="text-center">
                 <h1 class="text-primary"><i class="fa fa-print" > </i></h1>
@@ -20,24 +20,43 @@
                             
                         </div>
                     </div>
-                 
+                    <div class="row m-t-25 text-left">
+                        <div class="container">
+                            <p>Tipo de impresiónes personalizadas(Ej. 513 - 530).</b></p>
+                        </div>
+                    </div>
                     <br><br>
                     <div class="row">
                     <div class="container">
-                        
+                        <p>
+                            El rango máximo de credenciales son <b>50</b>.   
+                        </p>
                         </div>
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             <div class="form-group form-primary">
-                                <input  type="text" class="form-control" name="name" value="{{old('name')}}" required>
+                                <input  type="number" class="form-control" name="minRange" value="{{old('minRange')}}" required>
                                 <span class="form-bar"></span>
-                                <label class="float-label minRangeText">Nombre Completo</label>
+                                <label class="float-label minRangeText">Minimo</label>
                             </div>
-                            @error("name")
+                            @error("minRange")
                                 <p  class="text-danger">
                                    {{ $message }}
                                 </p>
                             @enderror
                          
+                        </div>
+                        <div class="col-sm-6" id="maxRange">
+                            <div class="form-group form-primary">
+                                <input  type="number" class="form-control" name="maxRange" value="{{old('maxRange')}}" required>
+                                <span class="form-bar"></span>
+                                <label class="float-label">Máximo</label>
+                            </div>
+                            @error("maxRange")
+                            <p class="text-danger">
+                                {{ $message }}
+                            </p>
+                            @enderror
+                            
                         </div>
                     </div>
                     <div class="row m-t-25 text-left">
@@ -72,3 +91,4 @@
     </div>
   </div>
 </div>
+
