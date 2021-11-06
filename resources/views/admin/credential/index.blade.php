@@ -8,7 +8,7 @@
 
     <div class="container row">
         @if($credentialIsFinded)
-            <h5 class="text-center">NÚMERO DE CREDENCIALES IMPRESAS SON:  {{$credentials->count()}} </h5>
+            <h5 class="text-center">NÚMERO DE CREDENCIALES IMPRESAS SON:  {{count($credentials)}} </h5>
             <br>
             <br>
             <table class="table">
@@ -28,7 +28,7 @@
                 </tbody>
             </table>
         @else
-            <p>No se ha impreso, ninguna credencial de <b>$worker</b></p>
+            <p>No se ha impreso, ninguna credencial de <b>{{$worker}}</b></p>
         @endif
 
     </div>
