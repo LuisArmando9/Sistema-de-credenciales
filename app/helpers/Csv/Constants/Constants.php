@@ -41,7 +41,6 @@ class Constants {
     }
     public static function getCorrectDate($date){
         $newData =  new DateTime(str_replace("/", "-", $date));  //15/03/2015
-
         return $newData->format('Y-m-d');;
     }
     

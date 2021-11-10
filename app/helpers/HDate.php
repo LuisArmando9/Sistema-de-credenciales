@@ -9,7 +9,7 @@ class HDate{
     "may"=> "Mayo",
     "june"=> "Junio",
     "july"=> "Julio",
-    "jugust"=> "Agosto",
+    "august"=> "Agosto",
     "september"=> "Septiembre",
     "october"=> "Octubre",
     "november"=> "Noviembre",
