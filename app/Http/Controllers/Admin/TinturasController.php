@@ -137,10 +137,11 @@ class TinturasController extends Controller
     public function upload(Request $request)
     {
         $request->validate(CsvRules::RULES);
+        $path = $request->file("cvs_file")->getRealPath();
+        $departamentImport = new CSVWorker($path, Table::TINTURA);
+        $departamentImport->insert();
         try {
-            $path = $request->file("cvs_file")->getRealPath();
-            $departamentImport = new CSVWorker($path, Table::TINTURA);
-            $departamentImport->insert();
+         
        } catch (\Exception $th) {
             return redirect()
             ->route('tintura.index')

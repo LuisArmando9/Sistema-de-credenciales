@@ -42,7 +42,7 @@
     </div>
 </div>
 @endsection
-@include('sweetalert::alert')
+
 @section('cardContent')
 
  <worker-table denomination="TINTURA"></worker-table>

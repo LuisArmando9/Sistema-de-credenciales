@@ -1,6 +1,6 @@
 <?php
 namespace App\helpers\Csv\Constants;
-
+use DateTime;
 class Constants {
     const EMPTY = 0;
     /***
@@ -38,6 +38,11 @@ class Constants {
     const MIN_RESULT = 1;
     public static function isEmpty($data){
         return count($data) == self::EMPTY;
+    }
+    public static function getCorrectDate($date){
+        $newData =  new DateTime(str_replace("/", "-", $date));  //15/03/2015
+
+        return $newData->format('Y-m-d');;
     }
     
    

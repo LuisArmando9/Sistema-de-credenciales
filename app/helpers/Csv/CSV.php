@@ -20,7 +20,7 @@ class CSV implements ICSV {
                     "curp" => $data[Constants::WORKER_CURP],
                     "nss" => $data[Constants::WORKER_NSS],
                     "id" => $data[Constants::WORKER_ID],
-                    "entry" => $data[Constants::WORKER_ENTRY],
+                    "entry" =>Constants::getCorrectDate( $data[Constants::WORKER_ENTRY]),
                     "departamentId" => $data[Constants::DEPARTAMENT_ID],
                     "created_at" => date("Y-m-d H:i:s"),
                     "updated_at" => date("Y-m-d H:i:s"),
@@ -69,14 +69,8 @@ class CSV implements ICSV {
         if(Table::isEmpty($this->tableName)){
             Table::clean($this->tableName);
         }
-        DB::beginTransaction();
-        try {
-            DB::table($this->tableName)->insert($this->getTableData());
-            DB::commit();
-        } catch (\Exception $th) {
-            DB::rollback();
-            throw new Exception("Error al insertar, verifiqué sus campos del csv.");
-        }
+        DB::table($this->tableName)->insert($this->getTableData());
+        
 
     }
     public function __construct($path)
