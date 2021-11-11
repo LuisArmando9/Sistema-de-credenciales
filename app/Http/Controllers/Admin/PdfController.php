@@ -15,6 +15,7 @@ use App\helpers\Pdf\HPDF;
 use Exception;
 use Faker\Core\Number;
 
+
 class PdfController extends Controller
 {
     const FILE_NAME = "/credentials/template_for_credential.jpg";
@@ -56,11 +57,47 @@ class PdfController extends Controller
     }
     private function getPdf($workers, $denomination){
         
-        $pdf = new HPDF($workers, $denomination);
-        $pdf->writePdfCredential();
-        $pdfName = $this->getPdfName($workers, $denomination);
-        header('Content-type: application/pdf');
-        return $pdf->getOutput($pdfName);
+        DB::beginTransaction();
+        try{
+            $denomination = strtolower($denomination);
+            $pdf = new HPDF($workers, $denomination);
+            $pdf->writePdfCredential();
+            $pdfName = $this->getPdfName($workers, $denomination);
+            CCPdf::create([
+                "pdfName" => $this->getPdfName($workers,  $denomination),
+                "denomination" => $denomination,
+                "folios"=> "",
+                "credentialsNumber" => $workers->count()
+            ]);
+
+            DB::commit();
+            header('Content-type: application/pdf');
+            return $pdf->getOutput($pdfName);
+          
+        }catch(Exception $ex){
+            DB::rollback();
+            return redirect()->back()
+            ->with("toast_error", $ex->getMessage());
+        }
+    }
+    private function getDataPerDepartament(Request $request){
+        if(!$request->has('denomination') && !Table::isWorkerTable($request->post('denomination'))){
+            return back();
+        }
+        $response = $request->all();
+        $denomination = strtolower($response['denomination']); 
+        $request->validate([ 'departament' => "required|exists:{$denomination},departamentId"]);
+        return DB::table($denomination)
+         ->where("departamentId", $response['departament'] )->get();
+     
+
+
+    }
+    private function getAll(Request $request){
+        $request->validate(PdfRules::RULES_FOR_ALL_WORKERS);
+        $denomination = strtolower($request->all()["denomination"]);
+        return DB::table($denomination)->get();
+
     }
     private function getDataPerOneWorker($response){
         $denomination = strtolower($response["denomination"]);
@@ -80,7 +117,6 @@ class PdfController extends Controller
             throw new Exception("El nombre {$name} no se encuentra.");
         }
         return $worker;
-
     }
     private function getDataPerRanges($min, $max, $workerTable){
         $offset = $max - $min;
@@ -98,51 +134,33 @@ class PdfController extends Controller
             $validaton->errors()->add('error_input', 'error text');
             return redirect()->back()->withInput()->withErrors($validaton);
         }
-        $workers = $this->getDataPerOneWorker($response);
-        
-        DB::beginTransaction();
         try{
             $workers = $this->getDataPerOneWorker($response);
-            CCPdf::create([
-                "pdfName" => $this->getPdfName($workers,  $response["denomination"]),
-                "denomination" => $response["denomination"],
-                "folios"=> $this->getFolios($workers),
-                "credentialsNumber" => $workers->count()
-            ]);
-            DB::commit();
-            return $this->getPdf($workers, $response["denomination"]);
-          
+            return $this->getPdf($workers, $request->all()["denomination"]);
         }catch(Exception $ex){
-            DB::rollback();
             return redirect()->back()
             ->with("toast_error", $ex->getMessage());
         }
     }
     private function getPdfPerWorkerRanges(Request $request){
-        $validator = Validator::make($request->all(), PdfRules::RULES_PER_RANGES);
+        $response  = $request->all();
+        $validator = Validator::make( $response , PdfRules::RULES_PER_RANGES);
         if($validator->fails()){
             return redirect()->back()->with("toast_error", "<small>No se puede imprimir, contienes errores.</small>")
             ->withErrors($validator);
         }
-        $response = $request->all();
-        DB::beginTransaction();
-        try{
-            $workers = $this->getDataPerRanges($response["minRange"], 
-            $response["maxRange"], 
-            strtolower($response["denomination"]));
-            CCPdf::create([
-                "pdfName" => $this->getPdfName($workers,  $response["denomination"]),
-                "denomination" => $response["denomination"],
-                "folios"=> $this->getFolios($workers),
-                "credentialsNumber" => $workers->count()
-            ]);
-            DB::commit();
-            return $this->getPdf($workers, $request->post("denomination"));
-        }catch(Exception $ex){
-            return redirect()->back()
-            ->with("toast_error", $ex->getMessage());
-
-        }
+        $workers = $this->getDataPerRanges($response["minRange"], 
+        $response["maxRange"], 
+        strtolower($response["denomination"]));
+        return $this->getPdf($workers, $response["denomination"]);
+       
+    }
+    private function getPdfPerDenomination(Request $request){
+        return $this->getPdf($this->getAll($request), 
+                    $request->all()["denomination"]);
+    }
+    private function getPdfPerDepartament(Request $request){
+        return $this->getPdf($this->getDataPerDepartament($request), $request->all()["denomination"]);
     }
     /**
      * Store a newly created resource in storage.
@@ -157,6 +175,10 @@ class PdfController extends Controller
        }
        elseif($request->has('minRange') && $request->has('maxRange')){
            return $this->getPdfPerWorkerRanges($request);
+       }elseif($request->has("type")){
+            return $this->getPdfPerDenomination($request);
+       }elseif($request->has("departament")){
+            return $this->getPdfPerDepartament($request);
        }
        return back();   
     }

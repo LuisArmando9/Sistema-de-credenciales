@@ -26,9 +26,10 @@ class CredentialController extends Controller
             $ranges = explode('-', $tempRanges[0]);
             $minRange = $ranges[0];
             $maxRange = $ranges[1];
-            return $minRange >= $workerid &&  $workerid <= $maxRange;
+            return $workerid >= $minRange &&  $workerid <= $maxRange;
         }
         $ranges = explode('.', $pdfName);
+        
         return $ranges[0] == $workerid;
         
     }
@@ -46,10 +47,7 @@ class CredentialController extends Controller
         $matches = array();
         foreach ($pdfs as $pdf) {
             if($this->workerIdIsInRanges($pdf->pdfName, $worker->id)){
-                $ranges = explode(" ", $pdf->folios);
-                if(in_array($worker->id, $ranges)){
-                    array_push($matches, $pdf);
-                }
+                array_push($matches, $pdf);
             }
         }
         return $matches;
@@ -90,7 +88,7 @@ class CredentialController extends Controller
         if(is_null($worker)){
             return back()->with("toast_error", "Ocurrio un error al buscar, verifiqué sus campos");
         }
-        $credentials = $this->matches($denomination, $worker);//CCPdf::where("folio", $worker->id)->where("denomination", $denomination)->get(["pdfName", "created_at", "folios"]);
+        $credentials = $this->matches($denomination, $worker);
         $view = view("admin.credential.index")
             ->with("worker", $worker->worker);
         if(Constants::isEmpty($credentials)){
@@ -100,6 +98,7 @@ class CredentialController extends Controller
         return $view
         ->with("credentialIsFinded", true)
         ->with("credentials",  $credentials );
+        
     }
 
     /**

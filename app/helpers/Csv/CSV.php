@@ -69,7 +69,14 @@ class CSV implements ICSV {
         if(Table::isEmpty($this->tableName)){
             Table::clean($this->tableName);
         }
-        DB::table($this->tableName)->insert($this->getTableData());
+        DB::beginTransaction();
+        try {
+            DB::table($this->tableName)->insert($this->getTableData());
+            DB::commit();
+        } catch (\Exception $th) {
+            DB::rollback();
+            throw new Exception("Error al insertar, verifiqué sus campos del csv.");
+        }
         
 
     }

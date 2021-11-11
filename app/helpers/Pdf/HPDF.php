@@ -27,11 +27,9 @@ class HPDF
 
         $this->workers = $workers;
         if($workers->count() == Constants::EMPTY){
-            throw new Exception("Los datos ingresados estan vacios");
+            throw new Exception("<small>No contienes registros para imprimir. </small>");
         }
-        if($this->workers->count() > self::MAX_CREDENTIALS){
-            throw new Exception("Solo debe contener 100 credenciales");
-        }
+       
         $this->initPdf();
         $this->denomination = Table::getFullDenominatioName($denomination);
         $this->loadDepartaments();

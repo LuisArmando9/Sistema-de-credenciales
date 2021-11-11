@@ -2,7 +2,9 @@
 
 namespace App\View\Components\Admin\Modal;
 
+use App\Models\Departament;
 use Illuminate\View\Component;
+
 
 class CredentialPrint extends Component
 {
@@ -23,6 +25,8 @@ class CredentialPrint extends Component
      */
     public function render()
     {
-        return view('components.admin.modal.credential-printing');
+        
+        return view('components.admin.modal.credential-printing')
+        ->with("departaments", Departament::get(["id", "departamentName"]));
     }
 }
