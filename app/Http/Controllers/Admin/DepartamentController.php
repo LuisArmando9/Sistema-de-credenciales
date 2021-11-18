@@ -62,7 +62,7 @@ class DepartamentController extends Controller
             return redirect()->route('departament.create')->with("toast_error", "No se pudo crear el departamento.");
         }     
         return redirect()->route('departament.index')  
-        ->with("toast_success", "Se ha creado el departamento{$response['departamentName']}");
+        ->with("toast_success", "<small>Se ha creado el departamento {$response['departamentName']}</small>");
 
     }
 
@@ -114,7 +114,7 @@ class DepartamentController extends Controller
         }catch(\Exception){
            return  redirect()->route('departament.index')
             ->with("toast_error",
-            "<small>No se puede actulizar el id del departamento: <b>{$response['departamentName']}</b>, muchas áreas depende de el. </small>");
+            "<small>No se puede actualizar el id del departamento: <b>{$response['departamentName']}</b>. </small>");
         }
         return redirect()->route('departament.index')
         ->with("toast_success",
@@ -134,7 +134,7 @@ class DepartamentController extends Controller
             $departmanet->delete();
         } catch (\Illuminate\Database\QueryException  $th) {
             return redirect()->route('departament.index')
-            ->with("toast_error", "No se pudo eliminar el departamento {$departmanet->departamentName}");
+            ->with("toast_error", "<small>No se pudo eliminar el departamento {$departmanet->departamentName}</small>");
         }
         return redirect()->route('departament.index')
             ->withSuccess(
