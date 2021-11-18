@@ -55,14 +55,14 @@ class DepartamentController extends Controller
     {
         $request->validate(DepartamentRules::getRulesWithId());
         $response = $request->except(['_token']);
-        Departament::create($response);
+   
         try {
             Departament::create($response);
         } catch (\Illuminate\Database\QueryException $th) {
             return redirect()->route('departament.create')->with("toast_error", "No se pudo crear el departamento.");
         }     
         return redirect()->route('departament.index')  
-        ->with("toast_error", "Se ha creado el departamento{$response['departamentName']}");
+        ->with("toast_success", "Se ha creado el departamento{$response['departamentName']}");
 
     }
 
