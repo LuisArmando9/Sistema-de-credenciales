@@ -137,8 +137,8 @@ class DepartamentController extends Controller
             ->with("toast_error", "<small>No se pudo eliminar el departamento {$departmanet->departamentName}</small>");
         }
         return redirect()->route('departament.index')
-            ->withSuccess(
-            "Se ha eliminado correctamente el departamento: {$departmanet->departamentName}");
+            ->with('toat_success',
+            "<small>Se ha eliminado correctamente el departamento: {$departmanet->departamentName} </small>");
     }
      /**
      * Upload the specified resource from storage.
