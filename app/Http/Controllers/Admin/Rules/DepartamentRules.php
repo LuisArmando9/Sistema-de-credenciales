@@ -7,7 +7,7 @@ class DepartamentRules{
     ];
     public static function getRulesWithId(){
         $newRules = DepartamentRules::RULES;
-        $newRules["id"] =  "required|numeric|unique:Departament";
+        $newRules["id"] =  "required|numeric|unique:departament";
         return $newRules;
     }
 }
