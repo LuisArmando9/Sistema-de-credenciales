@@ -62,8 +62,7 @@ class TinturasController extends Controller
             return redirect()->route('tintura.create')->with("toast_success",
             "<small>Se ha creado correctamente un nuevo trabajador: <b>{$response['worker']}</b></small>");
         }
-        return redirect()->route('tintura.index')  
-        ->with("INSERT", "IS_OK");
+        return redirect()->route('tintura.index') ->with("toast_success", "Se ha creado un nuevo empleado.");
     }
 
     /**

@@ -39,11 +39,6 @@
                 </select>
             </div>
         </div>
-        @if(session('_INSERT') == '_IS_NOT')
-            <span class="text-danger" role="alert">
-                <p>{{ ('No se pudo insertar, verifiqué sus campos')}}</p>
-            </span>
-        @endif
         <div class="row m-t-30">
             <div class="col-md-12">
                 <button type="submit" class="btn btn-primary btn-md btn-block waves-effect waves-light text-center m-b-20">Crear</button>

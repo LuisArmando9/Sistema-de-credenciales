@@ -2366,7 +2366,7 @@ __webpack_require__.r(__webpack_exports__);
 
 function AMDelete(callback) {
   sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
-    title: 'Estas seguro de chingar elimanar?',
+    title: 'Estas seguro de  eliminar?',
     text: "Este dato ya no se podra recuperar!",
     icon: 'warning',
     showCancelButton: true,

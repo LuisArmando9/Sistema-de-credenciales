@@ -1,4 +1,4 @@
-$(".form-delete").submit(function(event){
+$(".form-delete").submit(function(event) {
     event.preventDefault();
     Swal.fire({
         title: 'Estas seguro de eliminar?',
@@ -8,24 +8,22 @@ $(".form-delete").submit(function(event){
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Si'
-      }).then((result) => {
-          if(result.value)
-          {
-              this.submit();
-          }
-      })
+    }).then((result) => {
+        if (result.value) {
+            this.submit();
+        }
+    })
 });
 
 
-function showSuccessAlert(title, message, icon = null)
-{
-    if(icon === null){
+function showSuccessAlert(title, message, icon = null) {
+    if (icon === null) {
         icon = "success";
     }
     Swal.fire(
         title,
         message,
         icon
-      )
+    )
 
 }

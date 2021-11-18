@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 export function AMDelete(callback) {
     Swal.fire({
-        title: 'Estas seguro de chingar elimanar?',
+        title: 'Estas seguro de  eliminar?',
         text: "Este dato ya no se podra recuperar!",
         icon: 'warning',
         showCancelButton: true,
